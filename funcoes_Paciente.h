@@ -48,7 +48,7 @@ Paciente *criar_paciente(){// O usuario insere as informacoes do novo paciente (
   scanf("%d", &p->idade);
 
   printf("CPF: ");
-  scanf("%d", &p->cpf);
+  scanf("%ld", &p->cpf);
   
   // status padrão: -1 (nao informado).
   p->status = -1;
@@ -81,7 +81,7 @@ void listar_pacientes(Paciente *lista_p){
 void print_dados_paciente(Paciente *p){
   printf("------------------\nNome: %s\n",p->Nome);
   printf("Idade: %d\n",p->idade);
-  printf("CPF: %d\n",p->cpf)
+  printf("CPF: %ld\n",p->cpf);
   print_dados_EUP(&p->eup);
 }
 
