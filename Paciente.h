@@ -1,24 +1,28 @@
-#include <stdio.h>
-#include <stdlib.h>
-//#include <main.c>
+#ifndef PACIENTE_H
+#define PACIENTE_H
+//#include "EUP.h"
 
+
+//Arquivo Paciente.h : Contem a estrutura "Paciente".
 
 typedef struct{
+  
   char Nome[40];
+  int idade;
+  long int cpf; 
+  int status;
+  // Um numero positivo indica qual leito o paciente esta ocupando, ex: leito 25. leito 0.
+  // -1: nao informado.
+  // -2: na lista de espera.
+  // -3: alta da UTI.
+
+  EUP eup;// esse eup contem TODAS as informacoes do paciente no que se refere seu EUP. Ou seja, tem a pontuacao geral, a pontuacao do SOFA e outros, quais comorbidades ele tem (ICC), etc.
+
+
   struct Paciente *prox_paciente;
   
 }Paciente;
 
-Paciente * criar_lista_pacientes(){//cria uma lista encadeada vazia.
-  return NULL;
-}
-
-//insere o novo paciente na primeira posição.
-Paciente* inserir_paciente (Paciente *lista_p, Paciente *novo_p){
-  //lp = lista de pacientes.
-  //np = novo paciente a ser inserido.
-  novo_p->prox_paciente = (struct Paciente*) lista_p;
-  return novo_p;
-}
 
 
+#endif
