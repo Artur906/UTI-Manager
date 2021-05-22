@@ -9,7 +9,7 @@
 
 /*
 void teste(){
- d
+ 
 	Paciente *p;
 
   p = criar_paciente();
