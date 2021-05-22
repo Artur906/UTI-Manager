@@ -5,7 +5,7 @@
 // inicio da Previsão de sobrevivência a longo prazo
 
 int cal_ICC(){
-  int * resul; //O ICC é uma sessão de múltipla escolha, por isso, acho que faz sentido usarmos uma lista dinâmica;  
+  int * resul;  //O ICC é uma sessão de múltipla escolha, por isso, acho que faz sentido usarmos uma lista dinâmica;  
   int continua; 
 
   printf("ICC \n Indice de cormobidade\n");

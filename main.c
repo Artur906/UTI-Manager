@@ -28,7 +28,7 @@ void teste(){
 int menu_principal(){
   int escolha; 
 	
-  printf("\n1 - Inserção de paciente\n2 - Listar Pacientes\n3 - Busca de paciente (por nome)\n4 - Atualização de status de paciente\n5 - Sair"); 
+  printf("\n1 - Inserção de paciente\n2 - Listar Pacientes\n3 - Busca de paciente (por nome)\n4 - Atualização de status de paciente \n5 - Sair"); 
   
   printf("\n->");
   scanf("%d", &escolha);

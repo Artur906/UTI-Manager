@@ -1,6 +1,6 @@
 #ifndef EUP_H
 #define  EUP_H
-// ifndef necessario, pois evita que "EUP.h" seja definido mais de uma vez, causando erros.
+// ifndef necessario, pois evita que "EUP.h" seja definido mais de uma vez, causando erros. 
 
 #include <stdio.h>
 #include <stdlib.h>

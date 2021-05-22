@@ -1,7 +1,7 @@
 #ifndef FUNCOES_PACIENTE_H
 #define FUNCOES_PACIENTE_H
 
-#include "Paciente.h"
+#include "Paciente.h" 
 #include "EUP.h"
 #include "funcoes_EUP.h"
 
