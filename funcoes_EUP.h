@@ -157,12 +157,12 @@ void preencher_dados_SOFA(SOFA *sofa){
   
   
   printf("--RESPIRATORIA--\n");
-  printf("Para atingir um nivel de SpO2 superior a 92/100 (por cento) , o paciente necessita de um cateter nasal? Se sim, insira a quantidade em L/min. Se não, insira 0.\n->");
+  printf("Para atingir um nivel de SpO2 superior a 92%%, o paciente necessita de um cateter nasal? Se sim, insira a quantidade em L/min. Se não, insira 0.\n->");
 
   scanf("%f", &sofa->cateter_nasal_O2);
 
   
-  printf("Para atingir um nivel de SpO2 superior a 92/100 (por cento) , o paciente necessita de ventilação mecanica? Se sim, insira a porcentagem de FiO2. Se não, insira 0.\n->");
+  printf("Para atingir um nivel de SpO2 superior a 92%%, o paciente necessita de ventilação mecanica? Se sim, insira a porcentagem de FiO2. Se não, insira 0.\n->");
 
   scanf("%f", &sofa->ventilacao_mec_FiO2);
   
@@ -193,7 +193,7 @@ void preencher_dados_SOFA(SOFA *sofa){
 
 
 void print_dados_SOFA(SOFA *sofa){
-  printf("----SOFA----\n");
+  printf("\n----SOFA----\n");
   printf("-PONTUACAO SOFA: %d\n",sofa->pont_SOFA);
   printf("----------------\n");
   printf("-ECG: %d\n",sofa->ecg);
@@ -202,10 +202,10 @@ void print_dados_SOFA(SOFA *sofa){
   printf("-Dosagem Dobutamina (mcg/kg/min): %.2f \n",sofa->dobutamina);
   printf("-Dosagem Noradrenalina (mcg/kg/min): %.2f \n",sofa->noradrenalina);
   if(sofa->cateter_nasal_O2 != 0){
-    printf("-SpO2 > 92/100 , com cateter nasal de (L/min): %.2f \n",sofa->cateter_nasal_O2);
+    printf("-SpO2 > 92%% , com cateter nasal de (L/min): %.2f \n",sofa->cateter_nasal_O2);
   }
   if(sofa->ventilacao_mec_FiO2 != 0){
-    printf("-SpO2 > 92/100 , com ventilaçao mecanica com FiO2 de( /100): %.2f \n",sofa->ventilacao_mec_FiO2);
+    printf("-SpO2 > 92%% , com ventilaçao mecanica com FiO2 de: %.2f%% \n",sofa->ventilacao_mec_FiO2);
   }
   else if(sofa->cateter_nasal_O2 == 0){
     printf("Sem respirador auxiliar.\n");
@@ -233,8 +233,6 @@ void calcular_pont_ICC(ICC *icc){
         /*if(j+1 == 12){
           icc->pont_ICC += 0
         }*/
-
-        //se entrar aqui então o número da comorbidade é igual a j+1, ai pra não ficar repetindo aquele negócio toda coloquei j+1
         if(j+1 == 1 || j+1 == 3 || j+1 == 4 || j+1 == 6 || j+1 == 7 || j+1 == 8 || j+1 == 10 || j+1 == 13 || j+1 == 19){
           icc->pont_ICC += 1;
         }
@@ -318,12 +316,27 @@ void print_dados_ICC(ICC *icc){
 //-------FUNCOES CFS--------
 
 void preencher_dados_CFS(CFS *cfs){
+  // Essa funcao NAO eh usada em pacientes com idade menor a 60 anos.
   // o usuario diz o nivel de fragilidade do paciente maior de idade.
-  // ou seja, um simples numero entre 1 e 8.
-  // funcao simples de fazer
+  printf("\n\n--PREENCHENDO O CFS-- \nESCALA CRÍTICA DE FRAGILIDADE\n"); 
+  printf("1 - Muito ativo \n2 - Ativo \n3 - Regular \n4 - Vulnerável \n5 - Levemente Frágil \n6 - Moderadamente Frágil \n7 - Muito Frágil \n8 - Severamente Frágil\n"); 
+
+  printf("Informe o nível de fragilidade do paciente: ");
+  scanf("%d",&cfs->pont_CFS);
+  
+  while(cfs->pont_CFS <1 || cfs->pont_CFS > 8){
+    printf("Escolha um nível entre 1 e 8: ");
+    scanf("%d",&cfs->pont_CFS); 
+  }
+  
+
 }
 
+//vou criar uma lista para os níveis de fragilidade, é mais por uma questão estética 
 void print_dados_CFS(CFS *cfs){
+  printf("\n----CFS----\n");
+  printf("-PONTUAÇÃO CFS: %d \n",cfs->pont_CFS);
+
   // printa o nivel de fragilidade. 
   // funcao simples de fazer
 }
@@ -333,12 +346,35 @@ void print_dados_CFS(CFS *cfs){
 //-------FUNCOES KPS--------
 
 void preencher_dados_KPS(KPS *kps){
+  printf("\n---KPS---- \nSTATUS DE DESEMPENHO KARNOFSKY\n"); 
+  printf("\n1 - Com ou sem doença crônica, consegue trabalhar normalmente\nKPS 100%% \n2 - Com doença crônica, consegue trabalhar apesar de ter sintomas\nKPS 80-90%% \n3 - Não consegue travalhar mas mantém hobbies e autocuidado\nKPS 50-60-70%% \n4 - É incapaz de cuidar de si mesmo \nKPS 10-20-30-40%% \n"); 
+  
+  printf("Informe o status do paciente: ");
+  scanf("%d",&kps->pont_KPS);
+  while(kps->pont_KPS <1 || kps->pont_KPS > 4){
+    printf("Escolha um status entre 1 e 4: ");
+    scanf("%d",&kps->pont_KPS); 
+  }
   // o usuario diz o nivel de dependencia que o paciente tem.
   // ou seja, um simples numero entre 1 e 4.
   // funcao simples de fazer
 }
 
 void print_dados_KPS(KPS *kps){
+  printf("\n----KPS----");
+  printf("-PONTUAÇÃO KPS: %d\n",kps->pont_KPS);
+  if(kps->pont_KPS == 1){
+    printf("-Com ou sem doença crônica, consegue trabalhar normalmente\n");
+  }
+  if(kps->pont_KPS == 2){
+    printf("-Com doença crônica, consegue trabalhar apesar de ter sintomas\n");
+  }
+  if(kps->pont_KPS == 3){
+    printf("-Não consegue travalhar mas mantém hobbies e autocuidado\n");
+  }
+  if(kps->pont_KPS == 4){
+    printf("-É incapaz de cuidar de si mesmo\n");
+  }
   // printa o nivel de dependencia. 
   // funcao simples de fazer
 }
@@ -361,6 +397,8 @@ void print_dados_EUP(EUP *eup){
 
 
 void calcular_pont_EUP(EUP *eup){
+  // Essa funcao pega todos os dados do paciente e calcula a pontuacao final EUP.
+
   int pont_PSCP =  0;// Previsão de sobrevivência a curto prazo.
   int pont_PSLP =  0;// Previsão de sobrevivência a longo prazo.
   int pont_PSGRT = 0;//Previsão de sobrevivência global e de resposta terapêutica.
@@ -372,7 +410,6 @@ void calcular_pont_EUP(EUP *eup){
   SOFA Simplificado	10-12	(3 pontos)
   SOFA Simplificado	>12	  (4 pontos)
   */
-
   if(eup->sofa.pont_SOFA < 6){
     pont_PSCP = 1; 
   }else if(eup->sofa.pont_SOFA >= 6 && eup->sofa.pont_SOFA <= 9){
@@ -395,19 +432,17 @@ void calcular_pont_EUP(EUP *eup){
 
   // Previsão de sobrevivência a longo prazo
   // Fiz em ordem decrescente, porque pensei que alguns problemas poderiam ocorrer se fossemos do menor para o maior
-  
-  /*
   if(eup->icc.pont_ICC > 5 || eup->cfs.pont_CFS == 7 || eup->cfs.pont_CFS == 8){
     pont_PSLP = 4; 
-  }else if(eup->icc.pont_ICC >= 3 && eup->icc.pont_ICC <= 5 || eup->cfs.pont_CFS == 5 || eup->cfs.pont_CFS == 6){
+  }else if((eup->icc.pont_ICC >= 3 && eup->icc.pont_ICC <= 5) || eup->cfs.pont_CFS == 5 || eup->cfs.pont_CFS == 6){
     pont_PSLP = 3; 
-  }else if(eup->icc.pont_ICC == 2 && eup->cfs.pont_CFS == 4){
+  }else if(eup->icc.pont_ICC == 2 || eup->cfs.pont_CFS == 4){
     pont_PSLP = 2;
-  }else{
+  }else if(eup->icc.pont_ICC >= 0 || eup->cfs.pont_CFS >=0){
     pont_PSLP = 1;
   }
   eup->pont_PSLP = pont_PSLP;
-  */
+  
   
 
   //3. Previsão de sobrevivência global e de resposta terapêutica, analisada pelo Karnofsky Performance Status KPS (adaptado).
@@ -417,8 +452,6 @@ void calcular_pont_EUP(EUP *eup){
   Não consegue trabalhar mas mantém hobbies e autocuidado	KPS 50-60-70%	(3 pontos)
   É incapaz de cuidar de si mesmo	KPS 10-20-30-40%	(4 pontos)
   */
-  
-  
   eup->pont_PSGRT = eup->kps.pont_KPS;
   if(eup->pont_PSGRT > 0){
     pont_PSGRT = eup->pont_PSGRT;
@@ -431,7 +464,7 @@ void calcular_pont_EUP(EUP *eup){
 
 
 void preecher_dados_EUP(EUP *eup, int idade){
-
+  //o usuario preecnhe os dados SOFA, ICC, CFS e KPS. Ao final disso, a pontuacao EUP eh calculada ao chamar a funcao "calcular_pont_EUP".
   preencher_dados_SOFA(&eup->sofa);
   preencher_dados_ICC(&eup->icc);
   if(idade >= 60){

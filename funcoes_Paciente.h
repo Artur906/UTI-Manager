@@ -34,7 +34,6 @@ void ordenar(Paciente *lista_p){
 }
 
 
-
 // Cria um paciente. retorna um ponteiro Paciente *p.
 Paciente *criar_paciente(){// O usuario insere as informacoes do novo paciente (Nome e Idade).
   Paciente *p;
@@ -73,7 +72,7 @@ Paciente* inserir_paciente (Paciente *lista_p, Paciente *novo_p){
 void listar_pacientes(Paciente *lista_p){
   Paciente *p = lista_p;
   while(p!= NULL){
-    printf("%s\n",p->Nome);
+    printf("nome: %s cpf: %lu\n",p->Nome,p->cpf);
     p = (Paciente *)p->prox_paciente;
   }
 }

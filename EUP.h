@@ -45,6 +45,7 @@ typedef struct SOFA{
 }SOFA;
 
 
+//lista com as comorbidades
 const char lista_comorbidades[19][45] = {"Demência","Diabetes com complicação","Diabetes sem complicação","Doença cérebro – vascular","Doença do fígado severa ou moderada","Doença do tecido conjuntivo","Doença hepática crônica ou cirrose","Doença pulmonar crônica","Doença renal severa ou moderada","Doença vascular periférica","Hemiplegia ou paraplegia","Hipertensão ","Insuficiência cardíaca congestiva","Leucemia ","Linfoma","SIDA","Tumor maligno","Tumor sólido metastático","Úlcera gastroduodenal"};
 
 typedef struct ICC{

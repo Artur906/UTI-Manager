@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include "EUP.h" 
 
-typedef struct{
+typedef struct UTI{
   int capacidade;
   
 }UTI;
 
-typedef struct{
+typedef struct fila{
   int ocupacao;
   long int cpf;
 
@@ -76,9 +76,9 @@ fila *add_leito(UTI *uti, fila *fila, Paciente *lista_p){
     aux_fila->prox_fila;
 
   }else if(auxPaci->status < 0){
-    printf("paciente ja está em um leito");
+    printf("paciente ja está em um leito\n");
   }else{
-    printf("infelismente não há leitos");
+    printf("infelizmente não há leitos\n");
   }
 
 
@@ -93,7 +93,7 @@ fila *remov_leito(UTI *p, fila **fila, Paciente *lista_p){
 
   p = malloc(sizeof(Paciente));
 
-  printf("qual paciente você deseja colocar no leito (insira o cpf)");
+  printf("qual paciente você deseja colocar no leito (insira o cpf) ->");
   scanf("%li",&busc_cpf);
   p = buscar_paciente_por_CPF(Lista_de_Pacientes, cpf);
   if(p != NULL){
@@ -129,8 +129,8 @@ fila *remov_leito(UTI *p, fila **fila, Paciente *lista_p){
   return 0;
   // falta descobrir como expliur
   // pergunatar numero do cpf do paciente
-  // dizer de qual leite ele vai sair
-  // atualizar stts do pacinete
+  // dizer de qual leito ele vai sair
+  // atualizar status do pacinete
 }
 
 int gere_uti(UTI *a){
