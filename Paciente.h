@@ -5,7 +5,7 @@
 
 //Arquivo Paciente.h : Contem a estrutura "Paciente".
 
-typedef struct{
+typedef struct Paciente{
   
   char Nome[40];
   int idade;

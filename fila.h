@@ -46,14 +46,88 @@ fila * add_p(fila *lista_fi){
   return *aux2;
 }*/
 
-fila *add_leito(UTI *p, fila *fila, Paciente *lista_p){
-  // pergunatar numero do cpf do paciente
-  // dizer para qual leite ele vai
-  // atualizar stts do pacinete
+fila *add_leito(UTI *uti, fila *fila, Paciente *lista_p){
+  UTI *aux = uti;
+  //fila *aux_fila = fila;
+  Paciente *auxPaci = lista_p
+  long int busc_cpf;
+  paciente *p;
+
+  p = malloc(sizeof(Paciente));
+
+  printf("qual paciente você deseja colocar no leito (insira o cpf)");
+  scanf("%li",&busc_cpf);
+  p = buscar_paciente_por_CPF(Lista_de_Pacientes, cpf);
+  if(p != NULL){
+    fila *aux_fila = p;
+  }
+  else{
+    printf("Paciente não encontrado\n");
+  }
+
+  adicionar_fi(aux_fila);
+  if (auxPaci->status < 0 || aux->capacidade > 0){
+    aux_fila->ocupacao = aux->capacidade;
+    aux_fila->cpf = auxPaci->CPF;
+    auxPaci->status = aux_capacidade;
+    auxPaci->prox_paciente;
+    aux->capacidade = aux->capacidade - 1;
+    adicionar_fi(aux_fila);
+    aux_fila->prox_fila;
+
+  }else if(auxPaci->status < 0){
+    printf("paciente ja está em um leito");
+  }else{
+    printf("infelismente não há leitos");
+  }
+
 
 }
 
-fila *remov_leito(UTI *p, fila *fila, Paciente *lista_p){
+fila *remov_leito(UTI *p, fila **fila, Paciente *lista_p){
+  UTI *aux = uti;
+  fila *aux_fila = *fila;
+  Paciente *auxPaci = lista_p
+  long int busc_cpf;
+  paciente *p;
+
+  p = malloc(sizeof(Paciente));
+
+  printf("qual paciente você deseja colocar no leito (insira o cpf)");
+  scanf("%li",&busc_cpf);
+  p = buscar_paciente_por_CPF(Lista_de_Pacientes, cpf);
+  if(p != NULL){
+    fila *aux_fila = p;
+  }
+  else{
+    printf("Paciente não encontrado\n");
+  }
+  if(*ag == NULL){
+    return 0;
+  }
+
+  fila *aux = *fila;
+
+  if( (*fila)->cpf == busc_cpf){
+     (*fila) = ( fila *) (*ag)->prox;
+     free(aux);
+
+     return 1;
+  }
+
+  fila *ante;
+
+  while(aux){
+    ante = aux;
+    aux = (fila *) aux->prox_fila;
+    if(aux->cpf == busc_cpf){
+      ante->prox = aux->prox_fila;
+      free(aux);
+      return 1;
+    }
+  }
+  return 0;
+  // falta descobrir como expliur
   // pergunatar numero do cpf do paciente
   // dizer de qual leite ele vai sair
   // atualizar stts do pacinete

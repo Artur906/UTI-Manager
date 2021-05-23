@@ -48,7 +48,7 @@ Paciente *criar_paciente(){// O usuario insere as informacoes do novo paciente (
   scanf("%d", &p->idade);
 
   printf("CPF: ");
-  scanf("%ld", &p->cpf);
+  scanf("%li", &p->cpf);
   
   // status padrão: -1 (nao informado).
   p->status = -1;
@@ -87,18 +87,18 @@ void print_dados_paciente(Paciente *p){
 
 
 // Funcao apenas diz se um dado paciente esta na lista de pacientes. Nao retorna nada.
-Paciente * buscar_paciente_por_nome(Paciente *lp, char np[40]){
+Paciente * buscar_paciente_por_CPF(Paciente *lp, long int cpf){
   Paciente *p = lp;
   while(p!=NULL){
   
-    if (strcmp(np, p->Nome) == 0){
+    if (p->cpf == cpf){
       printf("Paciente encontrado!\n");
       return p;// retorna o endereco do paciente encontrado.
     }
     p=(Paciente *)p->prox_paciente;
   }
 
-  printf("Paciente NÃO encontrado.\n");
+  //printf("Paciente NÃO encontrado.\n");
   return NULL;
 
 }
