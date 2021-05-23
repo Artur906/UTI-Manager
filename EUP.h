@@ -44,8 +44,8 @@ typedef struct SOFA{
 
 }SOFA;
 
-/*
-const char lista_todas_comorbidades_ICC[40][19] = {"1. Demência","2. Diabetes com complicação","3. Diabetes sem complicação","4. Doença cérebro – vascular","5. Doença do fígado severa ou moderada","6. Doença do tecido conjuntivo","7. Doença hepática crônica ou cirrose","8. Doença pulmonar crônica","9. Doença renal severa ou moderada","","","","",""}*/
+
+const char lista_comorbidades[19][45] = {"Demência","Diabetes com complicação","Diabetes sem complicação","Doença cérebro – vascular","Doença do fígado severa ou moderada","Doença do tecido conjuntivo","Doença hepática crônica ou cirrose","Doença pulmonar crônica","Doença renal severa ou moderada","Doença vascular periférica","Hemiplegia ou paraplegia","Hipertensão ","Insuficiência cardíaca congestiva","Leucemia ","Linfoma","SIDA","Tumor maligno","Tumor sólido metastático","Úlcera gastroduodenal"};
 
 typedef struct ICC{
 
