@@ -222,17 +222,97 @@ void print_dados_SOFA(SOFA *sofa){
 //-------FUNCOES ICC--------
 
 void calcular_pont_ICC(ICC *icc){
+  
   // calcula a pontuacao, somando os pontos equivalentes a cada comorbidade que o paciente tem.
-  // funcao relativamente simples de fazer.
+  icc->pont_ICC = 0; // o valor estava chegado aqui como -1; 
+
+  for(int i=0;i<icc->qntd_comorbidades;i++){
+    for(int j=0; j<19; j++){
+      if(icc->comorbidades[i] == j+1){
+        //Por alguma razão existe Hipertensão que vale 0, então não faz diferença por aqui.
+        /*if(j+1 == 12){
+          icc->pont_ICC += 0
+        }*/
+
+        if(j+1 == 1 || j+1 == 3 || j+1 == 4 || j+1 == 6 || j+1 == 7 || j+1 == 8 || j+1 == 10 || j+1 == 13 || j+1 == 19){
+          icc->pont_ICC += 1;
+        }
+        if(j+1 == 2 || j+1 == 9 || j+1 == 11 || j+1 == 14 || j+1 == 15 || j+1 == 17){
+          icc->pont_ICC += 2; 
+        }
+        if(j+1 == 5){
+          icc->pont_ICC += 3;
+        }
+        if(j+1 == 16 || j+1 == 18){
+          icc->pont_ICC += 6;
+        }
+      }
+    }
+  }
 }
 
 void preencher_dados_ICC(ICC *icc){
   // o usuario diz as comorbidades de um dado paciente.
-  // funcao relativamente simples de fazer.
+  int continua; 
+  char lista_comorbidades[19][45] = {"Demência","Diabetes com complicação","Diabetes sem complicação","Doença cérebro – vascular","Doença do fígado severa ou moderada","Doença do tecido conjuntivo","Doença hepática crônica ou cirrose","Doença pulmonar crônica","Doença renal severa ou moderada","Doença vascular periférica","Hemiplegia ou paraplegia","Hipertensão ","Insuficiência cardíaca congestiva","Leucemia ","Linfoma","SIDA","Tumor maligno","Tumor sólido metastático","Úlcera gastroduodenal"};
+
+  system("clear");
+  printf("\n--PREENCHENDO O ICC-- \n-INDICE DE COMORBIDADES-\n");
+
+  for(int i=0;i<19;i++){
+    printf("\n%d - %s", i+1, lista_comorbidades[i]);
+  }
+
+  printf("\nAlguma comorbidade? (1 = sim / 0 = não): ");
+  scanf("%d",&continua);
+
+  if(continua != 0){
+    icc->qntd_comorbidades = 1; //valor para iniciar a lista
+
+    icc->comorbidades = (int *) malloc(icc->qntd_comorbidades*sizeof(int));
+
+    // usuário começa a listar as comorbidades do paciente
+    
+    while(icc->qntd_comorbidades != 19){
+
+      if(icc->qntd_comorbidades != 1){
+        icc->comorbidades = (int *) realloc(icc->comorbidades, icc->qntd_comorbidades*sizeof(int));
+      }
+      printf("\n Selecione uma comorbidade: "); 
+      scanf("%d", &icc->comorbidades[icc->qntd_comorbidades-1]);// a lista começa na posição 0, nosso contadoor começa em 1; 
+      
+      printf("\nMais alguma? (1 = sim/ 0 = não) ->");
+      scanf("%d", &continua);
+
+      if(continua == 0){
+        break;
+      }else{
+        icc->qntd_comorbidades++;  
+      }
+    }
+  }
+
+  calcular_pont_ICC(icc); 
+
 }
 
 void print_dados_ICC(ICC *icc){
   // printa os dados ICC, ou seja, as comorbidades de um paciente.
+
+  char lista_comorbidades[19][45] = {"Demência","Diabetes com complicação","Diabetes sem complicação","Doença cérebro – vascular","Doença do fígado severa ou moderada","Doença do tecido conjuntivo","Doença hepática crônica ou cirrose","Doença pulmonar crônica","Doença renal severa ou moderada","Doença vascular periférica","Hemiplegia ou paraplegia","Hipertensão ","Insuficiência cardíaca congestiva","Leucemia ","Linfoma","SIDA","Tumor maligno","Tumor sólido metastático","Úlcera gastroduodenal"};
+
+  printf("\n----ICC----"); 
+  printf("\n-PONTUACAO ICC: %d",icc->pont_ICC);
+  printf("\n--------------------");
+  printf("\n--COMORBIDADES DO PACIENTE--\n");
+  for(int i=0; i < icc->qntd_comorbidades; i++){
+    for(int j=0; j<19; j++){
+      if(icc->comorbidades[i] == j+1){
+        printf("\n-%s\n",lista_comorbidades[j]);
+      }
+    }
+  }
+
   // funcao relativamente simples de fazer.
 }
 
