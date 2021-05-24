@@ -18,68 +18,6 @@
 
 //LEMBRETE: coisas ruins podem acontecer se existirem pacientes de CPF igual.
 
-//-----------TESTES------------------
-
-void teste_salvar_em_arquivo(){
-  Paciente *Lista_de_Pacientes;
-  Lista_de_Pacientes = criar_lista_pacientes();//lista vazia (NULL)
-  
-  //p1 eh criado e inserido a lista.
-  Paciente *p1;
-  p1 = malloc(sizeof(Paciente));
-  p1->status = -1;
-  preecher_dados_EUP_com_valor_padrao(&p1->eup);
-  p1->cpf = 123;
-  Lista_de_Pacientes = inserir_paciente(Lista_de_Pacientes, p1);
-
-  //p2 eh criado e inserido a lista.
-  Paciente *p2;
-  p2 = malloc(sizeof(Paciente));
-  p2->status = -1;
-  preecher_dados_EUP_com_valor_padrao(&p2->eup);
-  p2->cpf = 456;
-  Lista_de_Pacientes = inserir_paciente(Lista_de_Pacientes, p2);
-
-
-  UTI uti;
-  uti = criar_UTI();
-  
-  //printf("leitos: %d",uti.max_leitos);
-  uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
-
-  uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
-
-  salvar_dados_UTI_arquivo(&uti);
-  WriteListToFile(Lista_de_Pacientes);
-
-}
-
-void teste_ler_arquivo(){
-  Paciente *Lista_de_Pacientes;
-  Lista_de_Pacientes = criar_lista_pacientes();
-  Lista_de_Pacientes = ReadListIn(Lista_de_Pacientes);
-  UTI uti;
-  carregar_dados_UTI_arquivo(&uti);
-  listar_fila(&uti);
-
-  //mudar_max_leitos_UTI(&uti);
-  
-  //print_dados_paciente(Lista_de_Pacientes);
-  uti.fila = remover_paciente_fila(&uti, Lista_de_Pacientes);
-  listar_fila(&uti);
-}
-
-void testes_gerenciamento_leito(){
-
-}
-
-void testes(){
-  //teste_salvar_em_arquivo();
-  teste_ler_arquivo();
-  //testes_gerenciamento_leito
-}
-
-
 
 
 

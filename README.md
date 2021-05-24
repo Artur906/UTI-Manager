@@ -46,8 +46,10 @@ O _EUP_ é composto por 3 grupos de informações, que são:
  Não consegue trabalhar mas mantém hobbies e autocuidado |50-60-70%| +3
  É incapaz de cuidar de si mesmo|10-20-30-40%| +4
 
+### Estrutura básica do programa
+O programa dividi-se em duas partes, como mostra o diagrama a seguir.
 
-
+![imagem de exemplo](imagens/diagrama.png) 
 
 
 Aqui nesse readme, vamos resumir o que o nosso programa faz, qual a finaldade dele, como o usar, e outras paradas.
