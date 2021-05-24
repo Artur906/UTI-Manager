@@ -220,38 +220,44 @@ void print_dados_SOFA(SOFA *sofa){
 
 
 //-------FUNCOES ICC--------
+void preenchimento_padrao_lista_comorbidades(ICC *icc){
+  for(int i=0;i<19;i++){
+    icc->comorbidades[i] = 0; 
+  }
+}
 
 void calcular_pont_ICC(ICC *icc){
   
   // calcula a pontuacao, somando os pontos equivalentes a cada comorbidade que o paciente tem.
   icc->pont_ICC = 0; // o valor estava chegado aqui como -1; 
 
-  for(int i=0;i<icc->qntd_comorbidades;i++){
-    for(int j=0; j<19; j++){
-      if(icc->comorbidades[i] == j+1){
-        //Por alguma razão existe Hipertensão que vale 0, então não faz diferença por aqui.
-        /*if(j+1 == 12){
-          icc->pont_ICC += 0
-        }*/
-        if(j+1 == 1 || j+1 == 3 || j+1 == 4 || j+1 == 6 || j+1 == 7 || j+1 == 8 || j+1 == 10 || j+1 == 13 || j+1 == 19){
-          icc->pont_ICC += 1;
-        }
-        if(j+1 == 2 || j+1 == 9 || j+1 == 11 || j+1 == 14 || j+1 == 15 || j+1 == 17){
-          icc->pont_ICC += 2; 
-        }
-        if(j+1 == 5){
-          icc->pont_ICC += 3;
-        }
-        if(j+1 == 16 || j+1 == 18){
-          icc->pont_ICC += 6;
-        }
+  for(int i=0; i<19; i++){
+    if(icc->comorbidades[i] == 1){
+      //Por alguma razão existe Hipertensão que vale 0, então não faz diferença por aqui.
+      /*if(i+1 == 12){
+        icc->pont_ICC += 0
+      }*/
+      if(i+1 == 1 || i+1 == 3 || i+1 == 4 || i+1 == 6 ||i+1 == 7 || i+1 == 8 || i+1 == 10 || i+1 == 13 ||i+1 == 19){
+        icc->pont_ICC += 1;
+      }
+      if(i+1 == 2 || i+1 == 9 || i+1 == 11 || i+1 == 14 || i+1 == 15 || i+1 == 17){
+        icc->pont_ICC += 2; 
+      }
+      if(i+1 == 5){
+        icc->pont_ICC += 3;
+      }
+      if(i+1 == 16 || i+1 == 18){
+        icc->pont_ICC += 6;
       }
     }
   }
 }
 
+
 void preencher_dados_ICC(ICC *icc){
   // o usuario diz as comorbidades de um dado paciente.
+  preenchimento_padrao_lista_comorbidades(icc);
+  int posicao;
   int continua; 
 
   printf("\n--PREENCHENDO O ICC-- \n-INDICE DE COMORBIDADES-\n");
@@ -262,29 +268,28 @@ void preencher_dados_ICC(ICC *icc){
 
   printf("\n\nAlguma comorbidade? (1 = sim / 0 = não): ");
   scanf("%d",&continua);
-
+  getchar();
   if(continua != 0){
-    icc->qntd_comorbidades = 1; //valor para iniciar a lista
-
-    icc->comorbidades = (int *) malloc(icc->qntd_comorbidades*sizeof(int));
 
     // usuário começa a listar as comorbidades do paciente
     
-    while(icc->qntd_comorbidades != 19){
+    while(posicao != 0){
 
-      if(icc->qntd_comorbidades != 1){
-        icc->comorbidades = (int *) realloc(icc->comorbidades, icc->qntd_comorbidades*sizeof(int));
+      printf("Selecione uma comorbidade(ou 0 para encerrar): "); 
+      scanf("%d", &posicao);
+
+      while(posicao < 0 || posicao > 19){
+        printf("Informe uma comorbidade entre 1 e 19: ");
+        scanf("%d",&posicao);
+        getchar();
       }
-      printf("Selecione uma comorbidade: "); 
-      scanf("%d", &icc->comorbidades[icc->qntd_comorbidades-1]);// a lista começa na posição 0, nosso contadoor começa em 1; 
       
-      printf("Mais alguma? (1 = sim/ 0 = não) ->");
-      scanf("%d", &continua);
-
-      if(continua == 0){
+      if(posicao == 0){
         break;
+      }else if(icc->comorbidades[posicao-1] == 1){
+        icc->comorbidades[posicao-1] = 0; 
       }else{
-        icc->qntd_comorbidades++;  
+        icc->comorbidades[posicao-1] = 1; 
       }
     }
   }
@@ -299,16 +304,14 @@ void print_dados_ICC(ICC *icc){
   printf("\n----ICC----"); 
   printf("\n-PONTUACAO ICC: %d",icc->pont_ICC);
   printf("\n--------------------");
-  printf("\n--COMORBIDADES DO PACIENTE--\n");
-  for(int i=0; i < icc->qntd_comorbidades; i++){
-    for(int j=0; j<19; j++){
-      if(icc->comorbidades[i] == j+1){
-        printf("\n-%s\n",lista_comorbidades[j]);
-      }
+  printf("\n--COMORBIDADES DO PACIENTE--");
+  
+  for(int i=0; i<19; i++){
+    if(icc->comorbidades[i] == 1){
+      printf("\n-%s ",lista_comorbidades[i]);
     }
   }
 
-  // funcao relativamente simples de fazer.
 }
 
 
@@ -349,10 +352,10 @@ void preencher_dados_KPS(KPS *kps){
   printf("\n---KPS---- \nSTATUS DE DESEMPENHO KARNOFSKY\n"); 
   printf("\n1 - Com ou sem doença crônica, consegue trabalhar normalmente\nKPS 100%% \n2 - Com doença crônica, consegue trabalhar apesar de ter sintomas\nKPS 80-90%% \n3 - Não consegue travalhar mas mantém hobbies e autocuidado\nKPS 50-60-70%% \n4 - É incapaz de cuidar de si mesmo \nKPS 10-20-30-40%% \n"); 
   
-  printf("Informe o status do paciente: ");
+  printf("Informe no que o paciente se encaixa: ");
   scanf("%d",&kps->pont_KPS);
   while(kps->pont_KPS <1 || kps->pont_KPS > 4){
-    printf("Escolha um status entre 1 e 4: ");
+    printf("Escolha entre 1 e 4: ");
     scanf("%d",&kps->pont_KPS); 
   }
   // o usuario diz o nivel de dependencia que o paciente tem.
@@ -362,7 +365,7 @@ void preencher_dados_KPS(KPS *kps){
 
 void print_dados_KPS(KPS *kps){
   printf("\n----KPS----");
-  printf("-PONTUAÇÃO KPS: %d\n",kps->pont_KPS);
+  printf("\n-PONTUAÇÃO KPS: %d\n",kps->pont_KPS);
   if(kps->pont_KPS == 1){
     printf("-Com ou sem doença crônica, consegue trabalhar normalmente\n");
   }
@@ -370,7 +373,7 @@ void print_dados_KPS(KPS *kps){
     printf("-Com doença crônica, consegue trabalhar apesar de ter sintomas\n");
   }
   if(kps->pont_KPS == 3){
-    printf("-Não consegue travalhar mas mantém hobbies e autocuidado\n");
+    printf("-Não consegue trabalhar mas mantém hobbies e autocuidado\n");
   }
   if(kps->pont_KPS == 4){
     printf("-É incapaz de cuidar de si mesmo\n");

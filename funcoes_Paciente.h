@@ -49,6 +49,7 @@ Paciente *criar_paciente(){// O usuario insere as informacoes do novo paciente (
   printf("CPF: ");
   scanf("%li", &p->cpf);
   
+  
   // status padrão: -1 (nao informado).
   p->status = -1;
 
@@ -91,7 +92,7 @@ Paciente * buscar_paciente_por_CPF(Paciente *lp, long int cpf){
   while(p!=NULL){
   
     if (p->cpf == cpf){
-      printf("Paciente encontrado!\n");
+      //printf("Paciente encontrado!\n");
       return p;// retorna o endereco do paciente encontrado.
     }
     p=(Paciente *)p->prox_paciente;

@@ -1,7 +1,12 @@
+
 #ifndef FILA_H
 #define  FILA_H
 #include <stdio.h>
 #include "EUP.h" 
+#include "Paciente.h"
+
+//TODO O CODIGO ABAIXO EH OBSOLETO, E SERA SUBSTITUIDO.
+
 
 typedef struct UTI{
   int capacidade;
@@ -13,7 +18,7 @@ typedef struct fila{
   long int cpf;
 
 
-  fila *prox_fila;
+  struct fila *prox_fila;
 }fila;
 
 fila * cria_fila(){
@@ -21,12 +26,12 @@ fila * cria_fila(){
 }
 
 fila * add_p(fila *lista_fi){
-  paciente *p;
-  p = (paciente *) malloc(sizeof(fila));
+  Paciente *p;
+  p = (Paciente *) malloc(sizeof(fila));
 
-  *lista_fi->prox_fila =  (struct fila*) p;
+  *lista_fi->prox_fila =  (struct *fila) p;
 
-  return *lista_fi;
+  return lista_fi;
 }
 
 /*fila * adicionar_fi(UTI *p, fila *fila, Paciente *lista_p){
@@ -51,7 +56,7 @@ fila *add_leito(UTI *uti, fila *fila, Paciente *lista_p){
   //fila *aux_fila = fila;
   Paciente *auxPaci = lista_p
   long int busc_cpf;
-  paciente *p;
+  Paciente *p;
 
   p = malloc(sizeof(Paciente));
 
@@ -123,6 +128,7 @@ fila *remov_leito(UTI *p, fila **fila, Paciente *lista_p){
     if(aux->cpf == busc_cpf){
       ante->prox = aux->prox_fila;
       free(aux);
+      aux->capacidade = aux->capacidade + 1;
       return 1;
     }
   }
@@ -133,6 +139,16 @@ fila *remov_leito(UTI *p, fila **fila, Paciente *lista_p){
   // atualizar status do pacinete
 }
 
+void *lista_leito(fila **lista_fila){
+  fila *p = lista_fila;
+
+  while(p != NULL){
+    printf("leito: %d \npaciente: %li",p->ocupacao,p->cpf);
+    p = (fila *) p->prox_fila;
+
+  }
+}
+
 int gere_uti(UTI *a){
   struct UTI *p = a;
 
@@ -140,9 +156,6 @@ int gere_uti(UTI *a){
   scanf("%d", &p->capacidade);
 }
 
-int fila(UTI *a, Paciente *lista_p){
-  Paciente *p = lista_p;
-  UTI *aux = a;
-}
+
 #endif
 

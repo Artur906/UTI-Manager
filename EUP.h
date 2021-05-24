@@ -52,8 +52,8 @@ typedef struct ICC{
 
   int pont_ICC; // pontuacao ICC final.
 
-  int qntd_comorbidades; /*foi necessario saber a quantidade de comorbidades para a hora de fazer os prints e conversão dos resultados */
-  int * comorbidades; 
+  
+  int comorbidades[19]; 
   
 }ICC;
 
