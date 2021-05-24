@@ -30,14 +30,16 @@ UTI *mudar_max_leitos_UTI(UTI *uti){// o usuario atualiza o max de leitos.
   int novo_max_leitos;
   scanf("%d",&novo_max_leitos);
   getchar();
-  if(novo_max_leitos >= uti->leitos_disponiveis){
-    //o maximo de leitos eh mudados, assim como a quantidade de leitos disponiveis.
-    int leitos_ocupados = uti->max_leitos - uti->leitos_disponiveis;
+  int leitos_ocupados = uti->max_leitos - uti->leitos_disponiveis;
+  if(novo_max_leitos >= leitos_ocupados){
+    //o maximo de leitos eh mudado, assim como a quantidade de leitos disponiveis.
+    
     uti->max_leitos = novo_max_leitos;
     uti->leitos_disponiveis = novo_max_leitos - leitos_ocupados;
+    printf("quantidade de leitos mudada com sucesso.\n");
   }
-  else if(novo_max_leitos < uti->leitos_disponiveis){// caso em que o novo maximo de leitos eh menor que os leitos já ocupados.
-    printf("erro: existem %d pacientes ocupando leitos no momento. Remova pacientes de leitos e tente novamente.",uti->leitos_disponiveis);
+  else if(novo_max_leitos < leitos_ocupados){// caso em que o novo maximo de leitos eh menor que a quantidade de leitos já ocupados.
+    printf("erro: existem %d pacientes ocupando leitos no momento. Remova pacientes de leitos e tente novamente.\n",leitos_ocupados);
   }
   return uti;
 }

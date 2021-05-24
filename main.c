@@ -12,13 +12,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
-// BRANCH DE ANDREEEEEEEEEEEEEEEEEEEE.
+
 
 
 //LEMBRETE: coisas ruins podem acontecer se existirem pacientes de CPF igual.
-
-
 
 
 
@@ -94,14 +93,30 @@ int menu_principal(){
   return escolha;  
 }
 
-
+void esperaEnter(){
+  int tecla;
+  printf("pressione ENTER\n");
+  tecla = getchar();
+    if (tecla != 13){
+      //printf("pressione ENTER");
+      system("clear");
+    }
+  /*do{
+    tecla = getchar();
+    if (tecla != 13){
+      //printf("pressione ENTER");
+      system("clear");
+    }
+  }while (tecla != 13);*/
+  
+}
 
 
 
 void Principal() {
   UTI uti;
 	Paciente* Lista_de_Pacientes; // Lista encadeada com todos os pacientes.
-  int rl = carregar_dados_UTI_arquivo(&uti); //resultado da leitura: 0 mal sucedido/1 bem sucedido.
+  int rl = carregar_dados_UTI_arquivo(&uti); //resultado da leitura: 0 = mal sucedido / 1 = bem sucedido.
   if(rl == 0){
     uti = criar_UTI();//cria uma nova uti.
   }
@@ -110,7 +125,7 @@ void Principal() {
   Lista_de_Pacientes = ReadListIn(Lista_de_Pacientes);// CARREGA AS INFORMACOES SALVAS NO ARQUIVO.
 
 	int escolha_menu;			        // Operacao escolhida pelo user.
-	long int cpf;		    // variavel auxiliar de busca.
+	long int cpf;		              // variavel auxiliar de busca.
 	
 
 	Paciente *p;				          // paciente. Ponteiro auxiliar.
@@ -126,10 +141,11 @@ void Principal() {
         preecher_dados_EUP(&p->eup, p->idade);
         Lista_de_Pacientes = inserir_paciente(Lista_de_Pacientes, p);
         ordenar_por_EUP(Lista_de_Pacientes);
-        
+        esperaEnter();
         break;
       case 2: // 2 - Listar Pacientes.
         listar_pacientes(Lista_de_Pacientes);
+        esperaEnter();
         break;
       case 3: // 3 - Busca de paciente (por CPF).
         printf("CPF do paciente a ser buscado: \n");
@@ -143,22 +159,25 @@ void Principal() {
           printf("Paciente não encontrado\n");
         }
         
+        esperaEnter();
         break;
       case 4: //4 - listar pacientes em leito
         listar_fila(&uti);
-        
+        esperaEnter();
         break;
 
       case 5: //5 - Remover paciente de leito
         uti.fila = remover_paciente_fila(&uti, Lista_de_Pacientes);
+        esperaEnter();
         break;
 
       case 6: //6 - Adicionar paciente a leito
         uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
+        esperaEnter();
         break;
       case 7: //7 - Mudar quantidade máxima de leitos
         mudar_max_leitos_UTI(&uti);
-
+        esperaEnter();
         break;
 
       case 0: // 0 - Sair.

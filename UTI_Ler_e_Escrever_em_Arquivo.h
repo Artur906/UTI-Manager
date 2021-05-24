@@ -60,7 +60,7 @@ Fila *FilaReadListIn(Fila *start) {
 		rewind(pFile);
 		
 		int numEntries = (int)(fileSize / (sizeof(Fila)));
-    printf("Encontrado(s) %d Fila(s) no arquivo '%s'.\n ",numEntries,NOME_ARQUIVO_FILA);
+    printf("Encontrado(s) %d paciente(s) ocupante(s) de leito(s) no arquivo '%s'.\n ",numEntries,NOME_ARQUIVO_FILA);
 		
 		
 		int loop = 0;
