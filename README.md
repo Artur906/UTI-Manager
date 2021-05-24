@@ -70,10 +70,11 @@ Ao iniciar o programa será apresentado um menu:
     * Ao informar um CPF que está cadastrado serão mostradas todas as informações do paciente  
     * É mostrado um menu com opções para modificar os dados do paciente.
 4. Listar pacientes em leito  
-    * todos os pacientes cadastrados e posicionados em algum leito são listados. 
+    * Mostra o número de leitos e o número de ocupantes, depois, os CPF's dos pacientes que ocupam algum leito. 
 5. Remover paciente de leito  
-    
+    * O usuário informa o CPF de um paciente que deseja remover. 
 6. Adicionar paciente a leito  
+    * O usuário informa o CPF de um paciente que deseja adicionar a algum leito.
 7. Mudar quantidade máxima de  leitos  
     * O usuário informa a quantidade de leitos de UTI disponíveis.  
 0. Sair e Salvar

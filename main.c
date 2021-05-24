@@ -1,23 +1,20 @@
 #include "EUP.h"
 #include "funcoes_EUP.h"
+
 #include "Paciente.h"
 #include "funcoes_Paciente.h"
 #include "Paciente_Ler_e_Escrever_ListaEncadeada.h"
 
-#include "UTI_Ler_e_Escrever_em_Arquivo.h"
-//#include "Fila.h"
 #include "UTI.h"
 #include "funcoes_UTI.h"
+#include "UTI_Ler_e_Escrever_em_Arquivo.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-
-
-
-//LEMBRETE: coisas ruins podem acontecer se existirem pacientes de CPF igual.
 
 
 
