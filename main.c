@@ -3,24 +3,44 @@
 #include "Paciente.h"
 #include "funcoes_Paciente.h"
 #include "Paciente_Ler_e_Escrever_ListaEncadeada.h"
-//#include "calculadora.h"
+
+#include "UTI_Ler_e_Escrever_em_Arquivo.h"
+//#include "Fila.h"
+#include "UTI.h"
+#include "funcoes_UTI.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+// BRANCH DE ANDREEEEEEEEEEEEEEEEEEEE.
+
+
+//LEMBRETE: coisas ruins podem acontecer se existirem pacientes de CPF igual.
+
+
+
+
+
+//---------------------------------------------------
+//--------------------------------------------------
 
 //Menu de operacoes para um dado paciente.
 void menu_paciente(Paciente *p){
   printf("----MENU PACIENTE----\n");
   printf("---------------------------\nNome  | %s \nidade | %d \ncpf  | %lu \nstatus| %d\n---------------------------\nEUP   | %d \n---------------------------\nPSCP  | %d\nPSLP  | %d\nPSGRT | %d\n---------------------------\nSOFA  | %d\nICC   | %d\nCFS   | %d\nKPS   | %d\n---------------------------\n",p->Nome,p->idade,p->cpf,p->status,p->eup.pont_EUP, p->eup.pont_PSCP,p->eup.pont_PSLP,p->eup.pont_PSGRT,p->eup.sofa.pont_SOFA,p->eup.icc.pont_ICC,p->eup.cfs.pont_CFS,p->eup.kps.pont_KPS);
 
-  printf("0 - voltar \n1 - mostrar dados EUP \n2 - re-calcular pontuação SOFA. \n3 - re-calcular pontuacao ICC.  \n4 - re-calcular pontuacao CFS (apenas para maiores de 60 anos).  \n5 - re-calcular pontuacao KPS.  \n6 - re-calcular pontuacao EUP (recalcula SOFA, ICC, CFS e KPS). \n. \n7 - mudar status paciente.\n");
-
   int escolha_menu = 0;
   do{
+    
+
+    printf("0 - voltar para menu principal\n1 - mostrar dados EUP \n2 - re-calcular pontuação SOFA. \n3 - re-calcular pontuacao ICC.  \n4 - re-calcular pontuacao CFS (apenas para maiores de 60 anos).  \n5 - re-calcular pontuacao KPS.  \n6 - re-calcular pontuacao EUP (recalcula SOFA, ICC, CFS e KPS). \n");
+
+    printf("->");
     scanf("%d",&escolha_menu);
     getchar();
     switch(escolha_menu){
-      case 0:
+      case 0: //volta para o menu principal.
       printf("voltando...\n");
       break;
       case 1: //printa dados EUP.
@@ -41,7 +61,7 @@ void menu_paciente(Paciente *p){
         calcular_pont_EUP(&p->eup);// recalcula a pontuacao final, ja que a pontuacao CFS pode ter mudado.
       }
       else{
-        printf("o paciente tem menos de 60 anos\n");
+        printf("O paciente tem menos de 60 anos\n");
       }
       break;
       case 5: //re-calcular pont KPS.
@@ -50,9 +70,6 @@ void menu_paciente(Paciente *p){
       break;
       case 6: //re-calcular pont total (EUP).
       preecher_dados_EUP(&p->eup, p->idade);
-      break;
-      case 7:
-      
       break;
       
     }
@@ -65,10 +82,11 @@ void menu_paciente(Paciente *p){
 
 // Menu de operacoes Principais.
 int menu_principal(){
+  
   printf("----MENU PRINCIPAL----\n");
   int escolha; 
 	
-  printf("\n1 - Inserção de paciente\n2 - Listar Pacientes\n3 - Busca de paciente (por CPF)\n0 - Sair"); 
+  printf("\n1 - Inserção de paciente\n2 - Listar Pacientes\n3 - Busca de paciente (por CPF)\n4 - Listar pacientes em leito\n5 - Remover paciente de leito\n6 - Adicionar paciente a leito\n7 - Mudar quantidade máxima de leitos\n0 - Sair e Salvar"); 
   
   printf("\n->");
   scanf("%d", &escolha);
@@ -78,14 +96,22 @@ int menu_principal(){
 
 
 
+
+
 void Principal() {
+  UTI uti;
 	Paciente* Lista_de_Pacientes; // Lista encadeada com todos os pacientes.
-  
-	int escolha_menu;			        // Operacao escolhida pelo user.
-	long int cpf;		    // variavel auxiliar.
-	Lista_de_Pacientes = criar_lista_pacientes(); // cria uma lista vazia de valor NULL.
+  int rl = carregar_dados_UTI_arquivo(&uti); //resultado da leitura: 0 mal sucedido/1 bem sucedido.
+  if(rl == 0){
+    uti = criar_UTI();//cria uma nova uti.
+  }
+  Lista_de_Pacientes = criar_lista_pacientes(); // cria uma lista vazia de valor NULL.
 
   Lista_de_Pacientes = ReadListIn(Lista_de_Pacientes);// CARREGA AS INFORMACOES SALVAS NO ARQUIVO.
+
+	int escolha_menu;			        // Operacao escolhida pelo user.
+	long int cpf;		    // variavel auxiliar de busca.
+	
 
 	Paciente *p;				          // paciente. Ponteiro auxiliar.
 	p = malloc(sizeof(Paciente)); // aloca a memoria necessaria.
@@ -100,6 +126,7 @@ void Principal() {
         preecher_dados_EUP(&p->eup, p->idade);
         Lista_de_Pacientes = inserir_paciente(Lista_de_Pacientes, p);
         ordenar_por_EUP(Lista_de_Pacientes);
+        
         break;
       case 2: // 2 - Listar Pacientes.
         listar_pacientes(Lista_de_Pacientes);
@@ -117,9 +144,27 @@ void Principal() {
         }
         
         break;
+      case 4: //4 - listar pacientes em leito
+        listar_fila(&uti);
+        
+        break;
+
+      case 5: //5 - Remover paciente de leito
+        uti.fila = remover_paciente_fila(&uti, Lista_de_Pacientes);
+        break;
+
+      case 6: //6 - Adicionar paciente a leito
+        uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
+        break;
+      case 7: //7 - Mudar quantidade máxima de leitos
+        mudar_max_leitos_UTI(&uti);
+
+        break;
+
       case 0: // 0 - Sair.
-        printf("Salvando dados dos pacientes e encerrando.\n");
+        printf("Salvando dados e encerrando.\n");
         WriteListToFile(Lista_de_Pacientes);//SALVA AS INFORMACOES NO ARQUIVO.
+        salvar_dados_UTI_arquivo(&uti);
         break;
       default:
         printf("Operacao inválida! \n");
@@ -133,6 +178,6 @@ void Principal() {
 
 int main(void) {
 	Principal();
-  //teste();
+  //testes();
 	return 0;
 }
