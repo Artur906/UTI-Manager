@@ -72,7 +72,7 @@ Paciente* inserir_paciente (Paciente *lista_p, Paciente *novo_p){
 void listar_pacientes(Paciente *lista_p){
   Paciente *p = lista_p;
   while(p!= NULL){
-    printf("nome: %s cpf: %lu\n",p->Nome,p->cpf);
+    printf("nome: %s cpf: %lu EUP: %d\n",p->Nome,p->cpf,p->eup.pont_EUP);
     p = (Paciente *)p->prox_paciente;
   }
 }
