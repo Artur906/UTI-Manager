@@ -17,151 +17,6 @@
 
 
 
-Fila * criar_Fila(){// cria uma fila vazia.
-  return NULL;
-}
-
-UTI criar_UTI(){// cria uma nova UTI.
-  UTI uti;
-  //uti = (UTI*) malloc(sizeof(UTI));
-  printf("quantos leitos existem na UTI?\n->");
-  int max_leitos;
-  scanf("%d",&max_leitos);
-  getchar();
-  uti.max_leitos = max_leitos;
-  uti.leitos_disponiveis = max_leitos;
-  uti.fila = criar_Fila();// crai uma fila vazia.
-  return uti;
-}
-
-UTI *mudar_max_leitos_UTI(UTI *uti){// o usuario atualiza o max de leitos.
-  printf("mudar leitos de UTI de %d para: \n->",uti->max_leitos);
-  int novo_max_leitos;
-  scanf("%d",&novo_max_leitos);
-  getchar();
-  if(novo_max_leitos >= uti->leitos_disponiveis){
-    //o maximo de leitos eh mudados, assim como a quantidade de leitos disponiveis.
-    int leitos_ocupados = uti->max_leitos - uti->leitos_disponiveis;
-    uti->max_leitos = novo_max_leitos;
-    uti->leitos_disponiveis = novo_max_leitos - leitos_ocupados;
-  }
-  else if(novo_max_leitos < uti->leitos_disponiveis){// caso em que o novo maximo de leitos eh menor que os leitos já ocupados.
-    printf("erro: existem %d pacientes ocupando leitos no momento. Remova pacientes de leitos e tente novamente.",uti->leitos_disponiveis);
-  }
-  return uti;
-}
-
-
-Fila* remover_paciente_fila(UTI *uti, Paciente *lista_p){// remove o paciente de um leito de UTI.
-
-  long int CPF;
-
-  printf("Insira o CPF do paciente que desejas internar em um leito de UTI.\n->");
-  scanf("%lu",&CPF);
-  getchar();
-
-  Fila *novo_pf = malloc(sizeof(Fila));
-  novo_pf->cpf = CPF;//cria um ocupante de fila com o cpf dados de parametro.
-  //printf("novo_pf->cpf: %lu \n",novo_pf->cpf);
-  Paciente *p;
-  p = malloc(sizeof(Paciente));
-  p = buscar_paciente_por_CPF(lista_p, CPF);
-  if(p!=NULL){//paciente foi encontrado.
-    if(p->status == 1){//paciente ocupava leito, logo, podemos remover-lo da internação.
-      
-    }
-    else{//paciente nao cupava leito.
-      printf("paciente ja nao ocupava leito.\n");
-    }
-  }
-  else{
-    printf("paciente nao encontrado\n");
-  }
-
-  return NULL;
-  //A fazer.
-
-  //O user ira inserir um cpf. Feito isso, eh feita a busca por cpf para encontrar o paciente a ser removido da fila.
-
-  //Se foi encontrado o endereco de memoria do dono do cpf, seu status eh mudado para -1 para indicar que nao está mais internado, e o seu indentificador na fila encadeada eh removido. Feito isso, a fila sem esse paciente eh retornada.
-
-  //Se nao foi encontrado o paciente, retorna a fila sem alterações e printa uma mensagem de erro.
-}
-
-
-//a funcao deve ser chamada com algo assim: uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
-Fila* inserir_paciente_fila (UTI *uti, Paciente *lista_p){
-  long int CPF;
-
-  printf("Insira o CPF do paciente que desejas internar em um leito de UTI.\n->");
-  scanf("%lu",&CPF);
-  getchar();
-
-  Fila *novo_pf = malloc(sizeof(Fila));
-  novo_pf->cpf = CPF;//cria um ocupante de fila com o cpf dados de parametro.
-  //printf("novo_pf->cpf: %lu \n",novo_pf->cpf);
-  Paciente *p;
-  p = malloc(sizeof(Paciente));
-  p = buscar_paciente_por_CPF(lista_p, CPF);
-  if(p!=NULL){//paciente foi encontrado.
-
-    if(uti->leitos_disponiveis > 0 && p->status < 0){// Caso existam leitos disponiveis e o paciente a ser inserido ainda não ocupa um leito (status menor que 0). Logo, realizamos a inserção.
-      uti->leitos_disponiveis --;// os leitos disponiveis diminuem, ja que um novo paciente ocupara um.
-      p->status = 1;//o status muda para indicar que o paciente está internado.
-      novo_pf->prox_Fila = (struct Fila*) uti->fila; // paciente eh inserido na fila.
-      return novo_pf;//retorna a fila com o novo paciente inserido.
-    }
-    else if(uti->leitos_disponiveis == 0){
-      printf("erro: UTI lotada!\n");
-    }
-    else if(p->status >= 0){
-      printf("erro: paciente ja internado na UTI!\n");
-    }
-  }
-  else{
-    printf("paciente (por CPF) nao encontrado\n");
-  }
-  return uti->fila;//retorna a fila sem alterações.
-  
-}
-
-// lista o cpf dos pacientes que ocupam leitos.
-void listar_fila(UTI *uti){
-  Fila *f = uti->fila;
-  printf("Numero de leitos: %d. Numero de ocupantes: %d \n",uti->max_leitos,uti->max_leitos - uti->leitos_disponiveis);
-  printf("-Ocupantes de leitos (CPF):\n");
-  while(f!= NULL){
-    
-    printf("%lu\n",f->cpf);
-    f = (Fila *)f->prox_Fila;
-  }
-}
-
-/*
-int remove_item(ldisp **l, int id){
-    if(!(*l)) // encerra se não houver item na lista
-        return 0;
-
-    ldisp *aux = (*l);
-    if((*l)->idAviao == id){ // verifica se posição == 0
-        (*l) = (*l)->prox; // coloca a lista no próximo item
-        free(aux); // limpa a memória
-
-        return 1; // finaliza com verdadeiro
-    }
-
-    ldisp *prev;
-    while(aux){ // verifica se aux não chegou ao fim e percorre a posição
-        prev = aux; // prev guarda valor da remoção
-        aux = aux->prox;
-        if(aux && aux->idAviao == id){ // verifica o id do avião
-            prev->prox = aux->prox;
-            free(aux);
-            return 1;
-        }
-    }
-    return 0;
-}*/
 
 
 
@@ -208,13 +63,14 @@ void teste_ler_arquivo(){
   Lista_de_Pacientes = criar_lista_pacientes();
   Lista_de_Pacientes = ReadListIn(Lista_de_Pacientes);
   UTI uti;
-  uti = carregar_dados_UTI_arquivo(&uti);
+  carregar_dados_UTI_arquivo(&uti);
   listar_fila(&uti);
 
   //mudar_max_leitos_UTI(&uti);
   
   //print_dados_paciente(Lista_de_Pacientes);
-  //remover_paciente_fila();
+  uti.fila = remover_paciente_fila(&uti, Lista_de_Pacientes);
+  listar_fila(&uti);
 }
 
 void testes_gerenciamento_leito(){
@@ -226,10 +82,6 @@ void testes(){
   teste_ler_arquivo();
   //testes_gerenciamento_leito
 }
-
-
-
-
 
 
 
@@ -248,13 +100,13 @@ void menu_paciente(Paciente *p){
   do{
     
 
-    printf("0 - voltar \n1 - mostrar dados EUP \n2 - re-calcular pontuação SOFA. \n3 - re-calcular pontuacao ICC.  \n4 - re-calcular pontuacao CFS (apenas para maiores de 60 anos).  \n5 - re-calcular pontuacao KPS.  \n6 - re-calcular pontuacao EUP (recalcula SOFA, ICC, CFS e KPS). \n. \n7 - mudar status paciente.\n");
+    printf("0 - voltar \n1 - mostrar dados EUP \n2 - re-calcular pontuação SOFA. \n3 - re-calcular pontuacao ICC.  \n4 - re-calcular pontuacao CFS (apenas para maiores de 60 anos).  \n5 - re-calcular pontuacao KPS.  \n6 - re-calcular pontuacao EUP (recalcula SOFA, ICC, CFS e KPS). \n");
 
     printf("->");
     scanf("%d",&escolha_menu);
     getchar();
     switch(escolha_menu){
-      case 0:
+      case 0: //volta para o menu principal.
       printf("voltando...\n");
       break;
       case 1: //printa dados EUP.
@@ -285,9 +137,6 @@ void menu_paciente(Paciente *p){
       case 6: //re-calcular pont total (EUP).
       preecher_dados_EUP(&p->eup, p->idade);
       break;
-      case 7:
-      
-      break;
       
     }
 
@@ -303,7 +152,7 @@ int menu_principal(){
   printf("----MENU PRINCIPAL----\n");
   int escolha; 
 	
-  printf("\n1 - Inserção de paciente\n2 - Listar Pacientes\n3 - Busca de paciente (por CPF)\n4 - Listar paciente em leito\n5 - Remover paciente de leito\n6 - Adicionar paciente a leito\n7 - Número de leitos\n0 - Sair"); 
+  printf("\n1 - Inserção de paciente\n2 - Listar Pacientes\n3 - Busca de paciente (por CPF)\n4 - Listar paciente em leito\n5 - Remover paciente de leito\n6 - Adicionar paciente a leito\n7 - Mudar quantidade máxima de leitos\n0 - Sair e Salvar"); 
   
   printf("\n->");
   scanf("%d", &escolha);
@@ -316,21 +165,19 @@ int menu_principal(){
 
 
 void Principal() {
+  UTI uti;
 	Paciente* Lista_de_Pacientes; // Lista encadeada com todos os pacientes.
-  /*UTI *ctUTI;  // controle de leitos
-  ctUTI = malloc(sizeof(UTI));
-  Fila *ctFila; // lista encadeada com todos os leitos
-  ctFila = malloc(sizeof(Fila));*/
-
-  //int teste;
-	int escolha_menu;			        // Operacao escolhida pelo user.
-	long int cpf;		    // variavel auxiliar.
-	Lista_de_Pacientes = criar_lista_pacientes(); // cria uma lista vazia de valor NULL.
-
-
-  //ctFila = cria_Fila();// cria uma lista vazia de valor NULL.
+  int rl = carregar_dados_UTI_arquivo(&uti); //resultado da leitura: 0 mal sucedido/1 bem sucedido.
+  if(rl == 0){
+    uti = criar_UTI();//cria uma nova uti.
+  }
+  Lista_de_Pacientes = criar_lista_pacientes(); // cria uma lista vazia de valor NULL.
 
   Lista_de_Pacientes = ReadListIn(Lista_de_Pacientes);// CARREGA AS INFORMACOES SALVAS NO ARQUIVO.
+
+	int escolha_menu;			        // Operacao escolhida pelo user.
+	long int cpf;		    // variavel auxiliar de busca.
+	
 
 	Paciente *p;				          // paciente. Ponteiro auxiliar.
 	p = malloc(sizeof(Paciente)); // aloca a memoria necessaria.
@@ -363,20 +210,20 @@ void Principal() {
         }
         
         break;
-      case 4: //4 - listar paciente em leito
-
+      case 4: //4 - listar pacientes em leito
+        listar_fila(&uti);
         
         break;
 
       case 5: //5 - Remover paciente de leito
-
+        remover_paciente_fila(&uti, Lista_de_Pacientes);
         break;
 
       case 6: //6 - Adicionar paciente a leito
-
+        inserir_paciente_fila(&uti, Lista_de_Pacientes);
         break;
-      case 7: //7 - Número de leitos
-
+      case 7: //7 - Mudar quantidade máxima de leitos
+        mudar_max_leitos_UTI(&uti);
 
         break;
 
@@ -395,7 +242,7 @@ void Principal() {
 
 
 int main(void) {
-	//Principal();
-  testes();
+	Principal();
+  //testes();
 	return 0;
 }

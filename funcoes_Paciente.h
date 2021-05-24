@@ -10,32 +10,6 @@ Paciente *criar_lista_pacientes(){
   return NULL;
 }
 
-// Esta funcao ordena a lista encadeada de pacientes em ordem alfabetica.
-void ordenar_alfabeticamente(Paciente *lista_p){
-  if (lista_p == NULL || (lista_p)->prox_paciente == NULL){
-    return;
-  }
-   Paciente *p = lista_p, *aux;
-  int x;
-
-  while(p != NULL){
-    aux = (Paciente *) p->prox_paciente;
-    while(aux != NULL){
-      if(p->eup->pont_EUP > aux->eup->pont_EUP{
-        x = p->eup->pont_EUP;
-        p->eup->pont_EUP = aux->eup->pont_EUP;
-        aux->eup->pont_EUP = x;
-        /*strcpy(x,p->Nome);
-        strcpy(p->Nome,aux->Nome);
-        strcpy(aux->Nome,x);*/
-      }
-      aux = (Paciente *) aux->prox_paciente;
-    }
-    p = (Paciente *)p->prox_paciente;
-  }
-  
-
-}
 
 // Esta funcao ordena a lista encadeada de menor a maior pontuação EUP.
 void ordenar_por_EUP(Paciente *lista_p){
@@ -93,7 +67,7 @@ Paciente *criar_paciente(){// O usuario insere as informacoes do novo paciente (
 Paciente* inserir_paciente (Paciente *lista_p, Paciente *novo_p){
   //lista_p = lista de pacientes.
   //novo_p = novo paciente a ser inserido.
-  ordenar(lista_p);
+  ordenar_por_EUP(lista_p);
   novo_p->prox_paciente = (struct Paciente*) lista_p;
   return novo_p;
 }

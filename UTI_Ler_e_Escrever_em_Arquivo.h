@@ -1,7 +1,7 @@
 #ifndef UTI_LER_E_ESCREVER_EM_ARQUIVO_H
 #define UTI_LER_E_ESCREVER_EM_ARQUIVO_H
 #include "UTI.h"
-
+#include "funcoes_UTI.h" //necessario apenas para usar a funcao criar_UTI.
 
 //daria pra guardar em arquivos juntos, so que seria mais trabalhoso
 
@@ -114,7 +114,7 @@ void salvar_dados_UTI_arquivo(UTI *uti){
 
 }
 
-UTI carregar_dados_UTI_arquivo(UTI *uti){
+int carregar_dados_UTI_arquivo(UTI *uti){
   //carrega os dados uti no salvos arquivo "dados_uti.bin", e carrega a fila encadeada salva em "dados_fila.bin".
   FILE *fp;
   
@@ -126,13 +126,16 @@ UTI carregar_dados_UTI_arquivo(UTI *uti){
     printf("carregado max_leitos: %d \n",uti->max_leitos);
     uti->fila = NULL;
     uti->fila = FilaReadListIn(uti->fila);
-
+    return 1;
   }
   else{
     printf("erro ao abrir arquivo %s \n",NOME_ARQUIVO_UTI);
+    return 0;
+    //uti = criar_UTI(uti);
   }
   fclose(fp);
-  return *uti;// Caso a abertura do arquivo tenha dado erro, retorna o parametro uti sem alterações. Caso tenha sucedido, retorna o que foi carregado do arquivo.
+  //return *uti;// Caso a abertura do arquivo tenha dado erro, retorna o parametro uti sem alterações. Caso tenha sucedido, retorna o que foi carregado do arquivo.
+  return 0;
 }
 
 
