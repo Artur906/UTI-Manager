@@ -11,7 +11,6 @@
 
 
 //Esse arquivo tem a funcao e ler e salvar dados relacionados a UTI e Fila.
-
 #define NOME_ARQUIVO_FILA "dados_Fila.bin" //guarda a lista encadeada fila.
 #define NOME_ARQUIVO_UTI  "dados_UTI.bin" //guarda as outras informacoes da uti.
 
@@ -45,22 +44,23 @@ Fila *FilaReadNextFromFile(Fila *start, FILE *pFile) {
 	return start;
 }
 
+
+
+//--------FUNCOES DE LER E ESCREVER ------------
 // Lê no arquivo a lista encadeada salva, e a retorna.
 Fila *FilaReadListIn(Fila *start) {
 	
 	FILE *pFile;
-	pFile = fopen(NOME_ARQUIVO, "rb");
+	pFile = fopen(NOME_ARQUIVO_FILA, "rb");
 	if(pFile != NULL) {
-	
 		FilaCleanUp(start);
 		start = NULL;
-		
 		fseek(pFile, 0, SEEK_END);
 		long fileSize = ftell(pFile);
 		rewind(pFile);
 		
 		int numEntries = (int)(fileSize / (sizeof(Fila)));
-    printf("Encontrado(s) %d Fila(s) no arquivo '%s'.\n ",numEntries,NOME_ARQUIVO);
+    printf("Encontrado(s) %d Fila(s) no arquivo '%s'.\n ",numEntries,NOME_ARQUIVO_FILA);
 		
 		
 		int loop = 0;
@@ -77,16 +77,14 @@ Fila *FilaReadListIn(Fila *start) {
 }
 
 // Escreve uma dada lista encadeada de Filas em um arquivo.
-void FilaWriteToFile(Fila *fila) {
+void FilaWriteToFile(Fila *start) {
 	FILE *pFile;
-	pFile = fopen(NOME_ARQUIVO, "wb");
+	pFile = fopen(NOME_ARQUIVO_FILA, "wb");
 	
 	if(pFile != NULL) {
-		Fila *FilaAtual = start;
-		
+		Fila *FilaAtual = start;	
 		Fila *holdProx = NULL;
 
-		
 		while(FilaAtual != NULL) {
 			holdProx = FilaAtual->prox_Fila;
 			
@@ -94,13 +92,9 @@ void FilaWriteToFile(Fila *fila) {
 			
 			fseek(pFile, 0, SEEK_END);
 			fwrite(FilaAtual, sizeof(Fila), 1, pFile);
-			
-			//printf("Writing:%s to file\n",FilaAtual->Nome);
-			
-			FilaAtual->prox_Fila = holdProx;
-			
-			holdProx = NULL;
-			
+			//printf("Writing:%s to file\n",FilaAtual->cpf);
+			FilaAtual->prox_Fila = holdProx;	
+			holdProx = NULL;		
 			FilaAtual = FilaAtual->prox_Fila;
 		}
 		fclose(pFile);
@@ -108,9 +102,41 @@ void FilaWriteToFile(Fila *fila) {
 	} else {
 		printf("%s FILE OPEN ERROR\n",NOME_ARQUIVO_FILA);
 	}
-	
 }
 
+void salvar_dados_UTI_arquivo(UTI *uti){
+  //salva dados uti no arquivo "dados_uti.bin", e salva os dados da fila em "dados_fila.bin".
+  FILE *fp;
+  fp = fopen(NOME_ARQUIVO_UTI,"wb");
+  fwrite(uti,sizeof(UTI),1,fp);
+  FilaWriteToFile(uti->fila);
+  fclose(fp);
+
+}
+
+UTI carregar_dados_UTI_arquivo(UTI *uti){
+  //carrega os dados uti no salvos arquivo "dados_uti.bin", e carrega a fila encadeada salva em "dados_fila.bin".
+  FILE *fp;
+  
+  fp = fopen(NOME_ARQUIVO_UTI,"rb");
+
+  if(fp != NULL){
+    fseek(fp, 0, SEEK_SET);
+    fread(uti, sizeof(UTI), 1, fp);//atente-se para &uti ou uti.
+    printf("carregado max_leitos: %d \n",uti->max_leitos);
+    uti->fila = NULL;
+    uti->fila = FilaReadListIn(uti->fila);
+
+  }
+  else{
+    printf("erro ao abrir arquivo %s \n",NOME_ARQUIVO_UTI);
+  }
+  fclose(fp);
+  return *uti;// Caso a abertura do arquivo tenha dado erro, retorna o parametro uti sem alterações. Caso tenha sucedido, retorna o que foi carregado do arquivo.
+}
+
+
+//LEMBRETE: se o arquivo dados_pacientes.bin for mudado por fora da aplicação (por exemplo excluido), os dados da fila de UTI (como cpf) serão de pacientes fantasmas, logo, o programa "quebra". 
 
 //ABAIXO algumas funcoes que eu(Andre) criei, mas nao funcionam corretamente e foram substituidas.
 
@@ -162,15 +188,4 @@ void salvar_dados_Filas_arquivo(Fila *lista_p){
 
 */
 
-
-
-void salvar_dados_UTI_arquivo(){
-  //salva dados uti no arquivo "dados_uti.bin", e salva os dados da fila em "dados_fila.bin".
-  File *fp;
-  
-}
-UTI* carregar_dados_UTI_arquivo(){
-  //carrega os dados uti no salvos arquivo "dados_uti.bin", e carrega a fila encadeada salva em "dados_fila.bin".
-
-}
 #endif

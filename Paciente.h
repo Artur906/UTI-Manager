@@ -12,8 +12,8 @@ typedef struct Paciente{
   long int cpf; 
   int status;
   // Um numero positivo indica qual leito o paciente esta ocupando, ex: leito 25. leito 0.
-  // -1: nao informado.
-  // -2: na lista de espera.
+  // -1: nao esta internado na UTI.
+  //  1: atualmente internado na UTI.
   // -3: alta da UTI.
 
   EUP eup;// esse eup contem TODAS as informacoes do paciente no que se refere seu EUP. Ou seja, tem a pontuacao geral, a pontuacao do SOFA e outros, quais comorbidades ele tem (ICC), etc.

@@ -4,9 +4,10 @@
 #include "funcoes_Paciente.h"
 #include "Paciente_Ler_e_Escrever_ListaEncadeada.h"
 
-//#include "UTI_Ler_e_Escrever_em_Arquivo.h"
+#include "UTI_Ler_e_Escrever_em_Arquivo.h"
 //#include "Fila.h"
-//#include "UTI.h"
+#include "UTI.h"
+#include "funcoes_UTI.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,21 +15,6 @@
 
 // BRANCH DE ANDREEEEEEEEEEEEEEEEEEEE.
 
-typedef struct Fila{
-  //int ocupacao; // numero do leito que um dado paciente ocupa.
-  
-  long int cpf; // CPF de um dado paciente que ocupa o leito.
-
-  struct Fila *prox_Fila; // para lista encadeada.
-
-}Fila;
-
-typedef struct UTI{ // struct principal para gerenciamento de leitos.
-  int max_leitos;        // maximo de leitos
-  int leitos_disponiveis;// leitos ainda disponiveis
-  Fila *fila;// lista encadeada da fila de pacientes em leitos.
-  
-}UTI;
 
 
 Fila * criar_Fila(){// cria uma fila vazia.
@@ -54,7 +40,10 @@ UTI *mudar_max_leitos_UTI(UTI *uti){// o usuario atualiza o max de leitos.
   scanf("%d",&novo_max_leitos);
   getchar();
   if(novo_max_leitos >= uti->leitos_disponiveis){
+    //o maximo de leitos eh mudados, assim como a quantidade de leitos disponiveis.
+    int leitos_ocupados = uti->max_leitos - uti->leitos_disponiveis;
     uti->max_leitos = novo_max_leitos;
+    uti->leitos_disponiveis = novo_max_leitos - leitos_ocupados;
   }
   else if(novo_max_leitos < uti->leitos_disponiveis){// caso em que o novo maximo de leitos eh menor que os leitos já ocupados.
     printf("erro: existem %d pacientes ocupando leitos no momento. Remova pacientes de leitos e tente novamente.",uti->leitos_disponiveis);
@@ -63,7 +52,43 @@ UTI *mudar_max_leitos_UTI(UTI *uti){// o usuario atualiza o max de leitos.
 }
 
 
-// Insere um paciente (identificado por um cpf) na primeira pos na fila.
+Fila* remover_paciente_fila(UTI *uti, Paciente *lista_p){// remove o paciente de um leito de UTI.
+
+  long int CPF;
+
+  printf("Insira o CPF do paciente que desejas internar em um leito de UTI.\n->");
+  scanf("%lu",&CPF);
+  getchar();
+
+  Fila *novo_pf = malloc(sizeof(Fila));
+  novo_pf->cpf = CPF;//cria um ocupante de fila com o cpf dados de parametro.
+  //printf("novo_pf->cpf: %lu \n",novo_pf->cpf);
+  Paciente *p;
+  p = malloc(sizeof(Paciente));
+  p = buscar_paciente_por_CPF(lista_p, CPF);
+  if(p!=NULL){//paciente foi encontrado.
+    if(p->status == 1){//paciente ocupava leito, logo, podemos remover-lo da internação.
+      
+    }
+    else{//paciente nao cupava leito.
+      printf("paciente ja nao ocupava leito.\n");
+    }
+  }
+  else{
+    printf("paciente nao encontrado\n");
+  }
+
+  return NULL;
+  //A fazer.
+
+  //O user ira inserir um cpf. Feito isso, eh feita a busca por cpf para encontrar o paciente a ser removido da fila.
+
+  //Se foi encontrado o endereco de memoria do dono do cpf, seu status eh mudado para -1 para indicar que nao está mais internado, e o seu indentificador na fila encadeada eh removido. Feito isso, a fila sem esse paciente eh retornada.
+
+  //Se nao foi encontrado o paciente, retorna a fila sem alterações e printa uma mensagem de erro.
+}
+
+
 //a funcao deve ser chamada com algo assim: uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
 Fila* inserir_paciente_fila (UTI *uti, Paciente *lista_p){
   long int CPF;
@@ -74,16 +99,23 @@ Fila* inserir_paciente_fila (UTI *uti, Paciente *lista_p){
 
   Fila *novo_pf = malloc(sizeof(Fila));
   novo_pf->cpf = CPF;//cria um ocupante de fila com o cpf dados de parametro.
-
+  //printf("novo_pf->cpf: %lu \n",novo_pf->cpf);
   Paciente *p;
   p = malloc(sizeof(Paciente));
-  p = buscar_paciente_por_CPF(lista_p, novo_pf->cpf);
+  p = buscar_paciente_por_CPF(lista_p, CPF);
   if(p!=NULL){//paciente foi encontrado.
 
     if(uti->leitos_disponiveis > 0 && p->status < 0){// Caso existam leitos disponiveis e o paciente a ser inserido ainda não ocupa um leito (status menor que 0). Logo, realizamos a inserção.
       uti->leitos_disponiveis --;// os leitos disponiveis diminuem, ja que um novo paciente ocupara um.
-      novo_pf->prox_Fila = (struct Fila*) uti->fila;
+      p->status = 1;//o status muda para indicar que o paciente está internado.
+      novo_pf->prox_Fila = (struct Fila*) uti->fila; // paciente eh inserido na fila.
       return novo_pf;//retorna a fila com o novo paciente inserido.
+    }
+    else if(uti->leitos_disponiveis == 0){
+      printf("erro: UTI lotada!\n");
+    }
+    else if(p->status >= 0){
+      printf("erro: paciente ja internado na UTI!\n");
     }
   }
   else{
@@ -96,166 +128,103 @@ Fila* inserir_paciente_fila (UTI *uti, Paciente *lista_p){
 // lista o cpf dos pacientes que ocupam leitos.
 void listar_fila(UTI *uti){
   Fila *f = uti->fila;
+  printf("Numero de leitos: %d. Numero de ocupantes: %d \n",uti->max_leitos,uti->max_leitos - uti->leitos_disponiveis);
+  printf("-Ocupantes de leitos (CPF):\n");
   while(f!= NULL){
-    printf("Numero de leitos: %d. Numero de ocupantes: %d \n",uti->max_leitos,uti->max_leitos - uti->leitos_disponiveis);
-    printf("-Ocupantes de leitos (CPF):\n");
+    
     printf("%lu\n",f->cpf);
     f = (Fila *)f->prox_Fila;
   }
 }
 
-#define NOME_ARQUIVO_FILA "dados_Fila.bin" //guarda a lista encadeada fila.
-#define NOME_ARQUIVO_UTI  "dados_UTI.bin" //guarda as outras informacoes da uti.
+/*
+int remove_item(ldisp **l, int id){
+    if(!(*l)) // encerra se não houver item na lista
+        return 0;
 
-void FilaCleanUp(Fila *start) {
-	
-	Fila *freeMe = start;
-	Fila *holdMe = NULL;	
-	while(freeMe != NULL) {
-		holdMe = (Fila*)freeMe->prox_Fila;
-		free(freeMe);
-		freeMe = holdMe;
-	}	
-}
+    ldisp *aux = (*l);
+    if((*l)->idAviao == id){ // verifica se posição == 0
+        (*l) = (*l)->prox; // coloca a lista no próximo item
+        free(aux); // limpa a memória
 
-Fila *FilaReadNextFromFile(Fila *start, FILE *pFile) {
-	size_t returnValue;
-	if(start == NULL) {
-		start = malloc(sizeof(Fila));
-		returnValue = fread(start, sizeof(Fila), 1, pFile);
-		start->prox_Fila = NULL;
-	} else {
-		Fila *indexPac = start;
-		Fila *newPac = malloc(sizeof(Fila));
-		while(indexPac->prox_Fila != NULL) {
-			indexPac = (Fila*)indexPac->prox_Fila;
-		}
-		returnValue = fread(newPac, sizeof(Fila), 1, pFile);
-		indexPac->prox_Fila = newPac;
-		newPac->prox_Fila = NULL;
-	}
-	return start;
-}
+        return 1; // finaliza com verdadeiro
+    }
+
+    ldisp *prev;
+    while(aux){ // verifica se aux não chegou ao fim e percorre a posição
+        prev = aux; // prev guarda valor da remoção
+        aux = aux->prox;
+        if(aux && aux->idAviao == id){ // verifica o id do avião
+            prev->prox = aux->prox;
+            free(aux);
+            return 1;
+        }
+    }
+    return 0;
+}*/
 
 
-
-//--------FUNCOES DE LER E ESCREVER ------------
-// Lê no arquivo a lista encadeada salva, e a retorna.
-Fila *FilaReadListIn(Fila *start) {
-	
-	FILE *pFile;
-	pFile = fopen(NOME_ARQUIVO, "rb");
-	if(pFile != NULL) {
-		FilaCleanUp(start);
-		start = NULL;
-		fseek(pFile, 0, SEEK_END);
-		long fileSize = ftell(pFile);
-		rewind(pFile);
-		
-		int numEntries = (int)(fileSize / (sizeof(Fila)));
-    printf("Encontrado(s) %d Fila(s) no arquivo '%s'.\n ",numEntries,NOME_ARQUIVO);
-		
-		
-		int loop = 0;
-		for(loop = 0; loop < numEntries; ++loop) {
-			fseek(pFile, (sizeof(Fila) * loop), SEEK_SET);
-			start = FilaReadNextFromFile(start, pFile);
-		}
-	}  else {
-		printf("%s FILE OPEN ERROR FOR READ\n",NOME_ARQUIVO_FILA);
-	}
-	
-	return start;
-
-}
-
-// Escreve uma dada lista encadeada de Filas em um arquivo.
-void FilaWriteToFile(Fila *start) {
-	FILE *pFile;
-	pFile = fopen(NOME_ARQUIVO, "wb");
-	
-	if(pFile != NULL) {
-		Fila *FilaAtual = start;	
-		Fila *holdProx = NULL;
-
-		while(FilaAtual != NULL) {
-			holdProx = FilaAtual->prox_Fila;
-			
-			FilaAtual->prox_Fila = NULL;
-			
-			fseek(pFile, 0, SEEK_END);
-			fwrite(FilaAtual, sizeof(Fila), 1, pFile);
-			//printf("Writing:%s to file\n",FilaAtual->cpf);
-			FilaAtual->prox_Fila = holdProx;	
-			holdProx = NULL;		
-			FilaAtual = FilaAtual->prox_Fila;
-		}
-		fclose(pFile);
-		pFile = NULL;
-	} else {
-		printf("%s FILE OPEN ERROR\n",NOME_ARQUIVO_FILA);
-	}
-}
-
-void salvar_dados_UTI_arquivo(UTI *uti){
-  //salva dados uti no arquivo "dados_uti.bin", e salva os dados da fila em "dados_fila.bin".
-  FILE *fp;
-  fp = fopen(NOME_ARQUIVO_UTI,"wb");
-  fwrite(uti,sizeof(UTI),1,fp);
-  FilaWriteToFile(uti->fila);
-  fclose(fp);
-
-}
-
-UTI* carregar_dados_UTI_arquivo(UTI *uti){
-  //carrega os dados uti no salvos arquivo "dados_uti.bin", e carrega a fila encadeada salva em "dados_fila.bin".
-  FILE *fp;
-  
-  fp = fopen(NOME_ARQUIVO_UTI,"rb");
-
-  if(fp != NULL){
-    fseek(fp, 0, SEEK_SET);
-    fread(uti, sizeof(UTI), 1, fp);//atente-se para &uti ou uti.
-    printf("carregado max_leitos: %d \n",uti->max_leitos);
-    uti->fila = NULL;
-    uti->fila = FilaReadListIn(uti->fila);
-
-  }
-  else{
-    printf("erro ao abrir arquivo %s \n",NOME_ARQUIVO_UTI);
-  }
-  fclose(fp);
-  return uti;// Caso a abertura do arquivo tenha dado erro, retorna o parametro uti sem alterações. Caso tenha sucedido, retorna o que foi carregado do arquivo.
-}
-
-//LEMBRETE: se o arquivo dados_pacientes.bin for mudado por fora da aplicação (por exemplo excluido), os dados da fila de UTI (como cpf) serão de pacientes fantasmas, logo, o programa quebra. 
 
 //LEMBRETE: coisas ruins podem acontecer se existirem pacientes de CPF igual.
 
 //-----------TESTES------------------
-void testes(){
+
+void teste_salvar_em_arquivo(){
+  Paciente *Lista_de_Pacientes;
+  Lista_de_Pacientes = criar_lista_pacientes();//lista vazia (NULL)
+  
+  //p1 eh criado e inserido a lista.
   Paciente *p1;
   p1 = malloc(sizeof(Paciente));
   p1->status = -1;
   preecher_dados_EUP_com_valor_padrao(&p1->eup);
   p1->cpf = 123;
- 
+  Lista_de_Pacientes = inserir_paciente(Lista_de_Pacientes, p1);
 
+  //p2 eh criado e inserido a lista.
   Paciente *p2;
   p2 = malloc(sizeof(Paciente));
   p2->status = -1;
   preecher_dados_EUP_com_valor_padrao(&p2->eup);
-  p2->cpf = 123;
+  p2->cpf = 456;
+  Lista_de_Pacientes = inserir_paciente(Lista_de_Pacientes, p2);
+
 
   UTI uti;
   uti = criar_UTI();
   
   //printf("leitos: %d",uti.max_leitos);
+  uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
 
-  //uti.fila
+  uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
 
   salvar_dados_UTI_arquivo(&uti);
+  WriteListToFile(Lista_de_Pacientes);
 
+}
+
+void teste_ler_arquivo(){
+  Paciente *Lista_de_Pacientes;
+  Lista_de_Pacientes = criar_lista_pacientes();
+  Lista_de_Pacientes = ReadListIn(Lista_de_Pacientes);
+  UTI uti;
+  uti = carregar_dados_UTI_arquivo(&uti);
+  listar_fila(&uti);
+
+  //mudar_max_leitos_UTI(&uti);
+  
+  //print_dados_paciente(Lista_de_Pacientes);
+  //remover_paciente_fila();
+}
+
+void testes_gerenciamento_leito(){
+
+}
+
+void testes(){
+  //teste_salvar_em_arquivo();
+  teste_ler_arquivo();
+  //testes_gerenciamento_leito
 }
 
 

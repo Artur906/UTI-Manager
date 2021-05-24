@@ -16,20 +16,24 @@ void ordenar(Paciente *lista_p){
     return;
   }
    Paciente *p = lista_p, *aux;
-  char x[40];
+  int x;
 
   while(p != NULL){
     aux = (Paciente *) p->prox_paciente;
     while(aux != NULL){
-      if(strcmp(p->Nome,aux->Nome) > 0){
-        strcpy(x,p->Nome);
+      if(p->eup->pont_EUP > aux->eup->pont_EUP{
+        x = p->eup->pont_EUP;
+        p->eup->pont_EUP = aux->eup->pont_EUP;
+        aux->eup->pont_EUP = x;
+        /*strcpy(x,p->Nome);
         strcpy(p->Nome,aux->Nome);
-        strcpy(aux->Nome,x);
+        strcpy(aux->Nome,x);*/
       }
       aux = (Paciente *) aux->prox_paciente;
     }
     p = (Paciente *)p->prox_paciente;
   }
+  
 
 }
 
@@ -82,6 +86,7 @@ void print_dados_paciente(Paciente *p){
   printf("------------------\nNome: %s\n",p->Nome);
   printf("Idade: %d\n",p->idade);
   printf("CPF: %ld\n",p->cpf);
+  printf("Status: %d \n",p->status);
   print_dados_EUP(&p->eup);
 }
 
