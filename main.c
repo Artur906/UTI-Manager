@@ -16,10 +16,6 @@
 // BRANCH DE ANDREEEEEEEEEEEEEEEEEEEE.
 
 
-
-
-
-
 //LEMBRETE: coisas ruins podem acontecer se existirem pacientes de CPF igual.
 
 //-----------TESTES------------------
@@ -100,7 +96,7 @@ void menu_paciente(Paciente *p){
   do{
     
 
-    printf("0 - voltar \n1 - mostrar dados EUP \n2 - re-calcular pontuação SOFA. \n3 - re-calcular pontuacao ICC.  \n4 - re-calcular pontuacao CFS (apenas para maiores de 60 anos).  \n5 - re-calcular pontuacao KPS.  \n6 - re-calcular pontuacao EUP (recalcula SOFA, ICC, CFS e KPS). \n");
+    printf("0 - voltar para menu principal\n1 - mostrar dados EUP \n2 - re-calcular pontuação SOFA. \n3 - re-calcular pontuacao ICC.  \n4 - re-calcular pontuacao CFS (apenas para maiores de 60 anos).  \n5 - re-calcular pontuacao KPS.  \n6 - re-calcular pontuacao EUP (recalcula SOFA, ICC, CFS e KPS). \n");
 
     printf("->");
     scanf("%d",&escolha_menu);
@@ -152,7 +148,7 @@ int menu_principal(){
   printf("----MENU PRINCIPAL----\n");
   int escolha; 
 	
-  printf("\n1 - Inserção de paciente\n2 - Listar Pacientes\n3 - Busca de paciente (por CPF)\n4 - Listar paciente em leito\n5 - Remover paciente de leito\n6 - Adicionar paciente a leito\n7 - Mudar quantidade máxima de leitos\n0 - Sair e Salvar"); 
+  printf("\n1 - Inserção de paciente\n2 - Listar Pacientes\n3 - Busca de paciente (por CPF)\n4 - Listar pacientes em leito\n5 - Remover paciente de leito\n6 - Adicionar paciente a leito\n7 - Mudar quantidade máxima de leitos\n0 - Sair e Salvar"); 
   
   printf("\n->");
   scanf("%d", &escolha);
@@ -216,11 +212,11 @@ void Principal() {
         break;
 
       case 5: //5 - Remover paciente de leito
-        remover_paciente_fila(&uti, Lista_de_Pacientes);
+        uti.fila = remover_paciente_fila(&uti, Lista_de_Pacientes);
         break;
 
       case 6: //6 - Adicionar paciente a leito
-        inserir_paciente_fila(&uti, Lista_de_Pacientes);
+        uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
         break;
       case 7: //7 - Mudar quantidade máxima de leitos
         mudar_max_leitos_UTI(&uti);
@@ -228,8 +224,9 @@ void Principal() {
         break;
 
       case 0: // 0 - Sair.
-        printf("Salvando dados dos pacientes e encerrando.\n");
+        printf("Salvando dados e encerrando.\n");
         WriteListToFile(Lista_de_Pacientes);//SALVA AS INFORMACOES NO ARQUIVO.
+        salvar_dados_UTI_arquivo(&uti);
         break;
       default:
         printf("Operacao inválida! \n");

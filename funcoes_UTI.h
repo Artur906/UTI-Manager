@@ -107,6 +107,17 @@ Fila* remover_paciente_fila(UTI *uti, Paciente *lista_p){// remove o paciente de
   //Se nao foi encontrado o paciente, retorna a fila sem alterações e printa uma mensagem de erro.
 }
 
+// lista o cpf dos pacientes que ocupam leitos.
+void listar_fila(UTI *uti){
+  Fila *f = uti->fila;
+  printf("Numero de leitos: %d. Numero de ocupantes: %d \n",uti->max_leitos,uti->max_leitos - uti->leitos_disponiveis);
+  printf("-Ocupantes de leitos (CPF):\n");
+  while(f!= NULL){
+    //n ta funcionando...
+    printf("%lu\n",f->cpf);
+    f = (Fila *)f->prox_Fila;
+  }
+}
 
 //a funcao deve ser chamada com algo assim: uti.fila = inserir_paciente_fila(&uti, Lista_de_Pacientes);
 Fila* inserir_paciente_fila (UTI *uti, Paciente *lista_p){
@@ -128,6 +139,8 @@ Fila* inserir_paciente_fila (UTI *uti, Paciente *lista_p){
       uti->leitos_disponiveis --;// os leitos disponiveis diminuem, ja que um novo paciente ocupara um.
       p->status = 1;//o status muda para indicar que o paciente está internado.
       novo_pf->prox_Fila = (struct Fila*) uti->fila; // paciente eh inserido na fila.
+      listar_fila(uti);
+
       return novo_pf;//retorna a fila com o novo paciente inserido.
     }
     else if(uti->leitos_disponiveis == 0){
@@ -144,17 +157,7 @@ Fila* inserir_paciente_fila (UTI *uti, Paciente *lista_p){
   
 }
 
-// lista o cpf dos pacientes que ocupam leitos.
-void listar_fila(UTI *uti){
-  Fila *f = uti->fila;
-  printf("Numero de leitos: %d. Numero de ocupantes: %d \n",uti->max_leitos,uti->max_leitos - uti->leitos_disponiveis);
-  printf("-Ocupantes de leitos (CPF):\n");
-  while(f!= NULL){
-    
-    printf("%lu\n",f->cpf);
-    f = (Fila *)f->prox_Fila;
-  }
-}
+
 
 
 
