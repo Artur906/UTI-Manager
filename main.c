@@ -344,6 +344,7 @@ void Principal() {
         p = criar_paciente();
         preecher_dados_EUP(&p->eup, p->idade);
         Lista_de_Pacientes = inserir_paciente(Lista_de_Pacientes, p);
+        ordenar_por_EUP(Lista_de_Pacientes);
         
         break;
       case 2: // 2 - Listar Pacientes.
