@@ -9,8 +9,8 @@
 
 
 typedef struct UTI{
-  int capacidade;
-  
+  int max_leitos;
+  int leitos_disponiveis;
 }UTI;
 
 typedef struct fila{
@@ -25,135 +25,164 @@ fila * cria_fila(){
   return NULL;
 }
 
-fila * add_p(fila *lista_fi){
+//AAAAAAAAAAAAAAAAAA
+//AAAAAAAAAAAAAAAAAAAAAAAA
+/*
+Fila * add_p(Fila *lista_fi){ //essa funcao eh bem estranha, n deu pra entender o que ela faz.
   Paciente *p;
-  p = (Paciente *) malloc(sizeof(fila));
+  p = (Paciente *) malloc(sizeof(Fila));
 
-  *lista_fi->prox_fila =  (struct *fila) p;
+  lista_fi->prox_Fila = (Fila *) p; // pq a gente ta adicionando um negocio do tipo Paciente a um ngc do tipo Fila? E pq um paciente sem informações?
 
   return lista_fi;
 }
+*/
 
-/*fila * adicionar_fi(UTI *p, fila *fila, Paciente *lista_p){
-  UTI *aux = p;
-  fila *aux2 = fila;
-  paciente *auxPaci = lista_p
 
-  while (aux->capacidade > 0 || aux2 != NULL){
-    adicionar_fi(aux);
-    aux2->ocupacao = aux->capacidade;
-    aux2->cpf = auxPaci->CPF;
-    auxPaci->prox_paciente;
-    aux2->prox_fila;
-    aux->capacidade = aux->capacidade - 1;
-  }
-
-  return *aux2;
-}*/
-
-fila *add_leito(UTI *uti, fila *fila, Paciente *lista_p){
-  UTI *aux = uti;
-  //fila *aux_fila = fila;
-  Paciente *auxPaci = lista_p
-  long int busc_cpf;
+Fila *add_leito(UTI *uti, Fila *lista_fila, Paciente *lista_p){ //adiciona um paciente a um leito.
+  //UTI *auxUti = uti; // O uso de auxiliares para "uti" e "lista_fila" nao faz sentido, eh mais facil simplemente usar as variaveis originais.
+  //Fila *auxFila = *lista_fila;
+  //Paciente *auxPaci = lista_p;
+  long int busc_cpf; // cpf a ser buscado.
   Paciente *p;
 
   p = malloc(sizeof(Paciente));
 
-  printf("qual paciente você deseja colocar no leito (insira o cpf)");
+  printf("Insira o CPF do paciente que deseja colocar no leito: ");
   scanf("%li",&busc_cpf);
-  p = buscar_paciente_por_CPF(Lista_de_Pacientes, cpf);
-  if(p != NULL){
-    fila *aux_fila = p;
+  p = buscar_paciente_por_CPF(lista_p, busc_cpf);
+  if(p == NULL){
+    printf("Paciente não encontrado\n");
+    return lista_fila;
   }
   else{
-    printf("Paciente não encontrado\n");
+    printf("Paciente encontrado\n");
+    //(*lista_fila)->cpf = lista_p->cpf;
+
+    if (p->status < 0 || uti->max_leitos > 0){// caso em que ha leitos disponiveis e o paciente ainda nao ocupa um.
+      lista_fila->ocupacao = uti->max_leitos;
+      lista_fila->cpf = p->cpf;
+      p->status = uti->max_leitos;
+      p = p->prox_paciente;
+      uti->max_leitos --;// a max_leitos da UTI dimunui em 1... Nao acho que isso fassa muito sentido, ja que o numero original que indica quantos leitos o hospital tem, se perde.
+      //add_p(lista_fila);
+      lista_fila = lista_fila->prox_Fila;
+
+    }else if(p->status < 0){ // caso em que o paciente ocupa um leito.
+      printf("paciente ja está em um leito\n");
+    }else{ // caso em que nao ha leitos.
+      printf("infelizmente não há leitos\n");
+    }
+    printf("%li",lista_fila->cpf);
+    printf("paciente adicionado\n");
+    return lista_fila;
   }
-
-  adicionar_fi(aux_fila);
-  if (auxPaci->status < 0 || aux->capacidade > 0){
-    aux_fila->ocupacao = aux->capacidade;
-    aux_fila->cpf = auxPaci->CPF;
-    auxPaci->status = aux_capacidade;
-    auxPaci->prox_paciente;
-    aux->capacidade = aux->capacidade - 1;
-    adicionar_fi(aux_fila);
-    aux_fila->prox_fila;
-
-  }else if(auxPaci->status < 0){
-    printf("paciente ja está em um leito\n");
-  }else{
-    printf("infelizmente não há leitos\n");
-  }
-
-
+  
+  return lista_fila;
 }
 
-fila *remov_leito(UTI *p, fila **fila, Paciente *lista_p){
-  UTI *aux = uti;
-  fila *aux_fila = *fila;
-  Paciente *auxPaci = lista_p
-  long int busc_cpf;
-  paciente *p;
-
-  p = malloc(sizeof(Paciente));
-
-  printf("qual paciente você deseja colocar no leito (insira o cpf) ->");
-  scanf("%li",&busc_cpf);
-  p = buscar_paciente_por_CPF(Lista_de_Pacientes, cpf);
-  if(p != NULL){
-    fila *aux_fila = p;
-  }
-  else{
-    printf("Paciente não encontrado\n");
-  }
-  if(*ag == NULL){
+int remov_leito2(UTI *lista_uti,Fila **lista_Fila,Paciente *lista_p){
+  if(*lista_Fila == NULL){
     return 0;
   }
+  long int exc_cpf;
 
-  fila *aux = *fila;
+  Fila *aux = *lista_Fila;
 
-  if( (*fila)->cpf == busc_cpf){
-     (*fila) = ( fila *) (*ag)->prox;
+  printf("digite o pacinete que você que excluir");
+  scanf("%li",&exc_cpf);
+
+  if((*lista_Fila)->cpf == exc_cpf){
+     (*lista_Fila) = (Fila*) (*lista_Fila)->prox_Fila;
      free(aux);
 
      return 1;
   }
 
-  fila *ante;
+  Fila *ante;
 
   while(aux){
     ante = aux;
-    aux = (fila *) aux->prox_fila;
-    if(aux->cpf == busc_cpf){
-      ante->prox = aux->prox_fila;
+    aux = (Fila *) aux->prox_Fila;
+    if((*lista_Fila)->cpf == exc_cpf){
+      ante->prox_Fila = aux->prox_Fila;
       free(aux);
-      aux->capacidade = aux->capacidade + 1;
       return 1;
     }
   }
   return 0;
+}
+
+Fila *remov_leito(UTI *lista_uti,Fila **lista_Fila,Paciente *lista_p){
+  UTI *aux = lista_uti;
+  Fila *aux_Fila = *lista_Fila;
+  Paciente *auxPaci = lista_p;
+  long int busc_cpf;
+  Paciente *p;
+
+  p = malloc(sizeof(Paciente));
+
+  printf("qual paciente você deseja remover do leito (insira o cpf) ->");
+  scanf("%li",&busc_cpf);
+  p = buscar_paciente_por_CPF(auxPaci, busc_cpf);
+  printf("\n%p",buscar_paciente_por_CPF(auxPaci, busc_cpf));
+  /*if(p != NULL){
+    //printf("Paciente encontrado\n");
+  }
+  else{
+    printf("Paciente não encontrado\n");
+  }*/
+  printf(".");
+  if(*lista_Fila == NULL){//lista_uti->fila
+    printf("UTI vazia");
+    //return lista_Fila;
+  }
+  printf("parou aqui");
+
+  Fila *aux_rem = *lista_Fila;
+
+  if((*lista_Fila)->cpf == busc_cpf){
+     (*lista_Fila) = ( Fila *) (*lista_Fila)->prox_Fila;
+     free(aux);
+     printf("Paciente removido");
+     //return *aux_rem;
+  }
+
+  Fila *ante;
+
+  while(aux_rem){
+    ante = (Fila *) aux_rem;
+    aux_rem = (Fila *) aux_rem->prox_Fila;
+    if(aux_rem->cpf == busc_cpf){
+      aux_rem->prox_Fila = aux_rem->prox_Fila;
+      free(aux);
+      aux->max_leitos = aux->max_leitos + 1;
+      printf("Paciente removido");
+      //return *aux_rem;
+    }
+  }
+
+  return aux_rem;
   // falta descobrir como expliur
   // pergunatar numero do cpf do paciente
   // dizer de qual leito ele vai sair
   // atualizar status do pacinete
 }
 
-void *lista_leito(fila **lista_fila){
-  fila *p = lista_fila;
+void lista_leito(Fila *lista_Fila){ //printa todos os leitos e os pacientes ocupantes.
+  //Fila *p = *lista_Fila;
 
-  while(p != NULL){
-    printf("leito: %d \npaciente: %li",p->ocupacao,p->cpf);
-    p = (fila *) p->prox_fila;
+  while( lista_Fila != NULL){
+    printf("leito: %d \npaciente: %li\n",lista_Fila->ocupacao,lista_Fila->cpf);
+    lista_Fila = (Fila *) lista_Fila->prox_Fila;
 
   }
+
 }
 
-int gere_uti(UTI *a){
-  struct UTI *p = a;
-
+void gere_uti(UTI *uti){ //gerenciar max_leitos da UTI.
   printf("Digite a quantidade de leitos disponivel: \n");
-  scanf("%d", &p->capacidade);
+  scanf("%d", &uti->max_leitos);
 }
 
 
