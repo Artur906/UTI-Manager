@@ -1,7 +1,7 @@
 #ifndef PACIENTE_LER_E_ESCREVER_LISTAENCADEADA_H
-#define  PACIENTE_LER_E_ESCREVER_LISTAENCADEADA_H
+#define PACIENTE_LER_E_ESCREVER_LISTAENCADEADA_H
 
-#define NOME_ARQUIVO "dados.bin"
+#define NOME_ARQUIVO "dados_pacientes.bin"
 
 //Implementação baseada no código por: BlueFeverSoft.
 //GitHub: https://github.com/bluefeversoft/Beginning_C/blob/master/ch58.c
