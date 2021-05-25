@@ -24,7 +24,7 @@ O _EUP_ é composto por 3 grupos de informações, que são:
 
 ### Como a pontuação EUP é calculada? 
 
-Cada grupo de informações tem seus próprios critérios para pontuação, depois de preenchidos com os dados do paciente é feita uma primeira verificação de maneira individual. Dessa forma, obtemos as pontuações do SOFA, ICC, CFS (para pacientes com mais de 60 anos) e KPS. Por últmo é utilizada e seguinte formula para calcular a pontuação EUP do paciente.   
+Cada grupo de informações tem seus próprios critérios para pontuação, depois de preenchidos com os dados do paciente é feita uma primeira verificação de maneira individual. Dessa forma, obtemos as pontuações do SOFA, ICC, CFS (para pacientes com mais de 60 anos) e KPS. Por últmo é utilizada e seguinte fórmula para calcular a pontuação EUP do paciente.   
 
 #### 1 - *Previsão de sobrevivência a curto prazo*
 
